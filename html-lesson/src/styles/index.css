@@ -1,0 +1,218 @@
+@import './fonts.css';
+@import './theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: rgb(var(--c-ink));
+  color: rgb(var(--c-snow));
+  font-family: 'Onest Variable', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button:disabled {
+  cursor: default;
+}
+:focus-visible {
+  outline: 3px solid rgb(var(--c-cyan) / 0.8);
+  outline-offset: 3px;
+}
+
+input[type='text'],
+input[type='url'] {
+  user-select: text;
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/10 bg-white/[0.055] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur-md;
+  }
+  .glass-strong {
+    @apply border border-white/15 bg-[rgb(14_22_64/0.72)] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-cyan via-electric to-violet bg-clip-text text-transparent;
+  }
+  .eyebrow {
+    @apply font-display text-[22px] font-medium uppercase tracking-[0.28em] text-cyan/80;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-2 text-[22px] font-medium text-snow/85;
+  }
+}
+
+/* Анимации фона */
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(180px, 120px, 0) scale(1.15); }
+}
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); }
+  50% { transform: translate3d(-220px, -90px, 0) scale(0.95); }
+}
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(120px, -160px, 0) scale(1.2); }
+}
+@keyframes grid-flow {
+  from { background-position: 0 0; }
+  to { background-position: 0 80px; }
+}
+@keyframes token-float {
+  0% { transform: translate3d(0, 40px, 0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate3d(0, -260px, 0); opacity: 0; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes caret {
+  50% { opacity: 0; }
+}
+@keyframes wave-hand {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(16deg); }
+  20%, 40% { transform: rotate(-10deg); }
+}
+
+.animate-spin-slow { animation: spin-slow 40s linear infinite; }
+.animate-pulse-ring { animation: pulse-ring 2.4s ease-out infinite; }
+.animate-caret { animation: caret 1s steps(1) infinite; }
+.animate-wave { animation: wave-hand 2.6s ease-in-out infinite; transform-origin: 70% 80%; }
+.shimmer-text {
+  background-size: 200% 100%;
+  animation: shimmer 6s linear infinite;
+}
+
+/* «Жеңіл режим» — для слабых компьютеров: без размытия и фоновых анимаций */
+html[data-lite='true'] .glass,
+html[data-lite='true'] .glass-strong {
+  backdrop-filter: none !important;
+  background-color: rgb(14 22 64 / 0.85);
+}
+html[data-lite='true'] [data-bg-anim] {
+  animation: none !important;
+}
+
+/* Полоса прокрутки (в панели учителя) */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); border-radius: 10px; }
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgb(var(--c-cyan)) var(--fill, 0%), rgb(255 255 255 / 0.18) var(--fill, 0%));
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 22px;
+  width: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 0 4px rgb(var(--c-cyan) / 0.35);
+}
+input[type='range']::-moz-range-track {
+  height: 8px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.18);
+}
+input[type='range']::-moz-range-progress {
+  height: 8px;
+  border-radius: 8px;
+  background: rgb(var(--c-cyan));
+}
+input[type='range']::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+}
+
+/*
+  Бесконечные декоративные анимации — только на CSS.
+  (Бесконечные transform-циклы через JS иногда давали значения вида 1e-31px,
+  из-за которых Chromium переставал отрисовывать элемент.)
+*/
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--float, -10px)); }
+}
+@keyframes float-rot {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(25deg); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(var(--wiggle, -10deg)); }
+  75% { transform: rotate(calc(var(--wiggle, -10deg) * -1)); }
+}
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(var(--pulse, 1.1)); }
+}
+@keyframes rise {
+  0% { transform: translateY(1000px) rotate(0deg); opacity: 0; }
+  10%, 90% { opacity: 0.8; }
+  100% { transform: translateY(-200px) rotate(180deg); opacity: 0; }
+}
+@keyframes card-turn {
+  0%, 20% { transform: rotate(0deg); }
+  25%, 45% { transform: rotate(90deg); }
+  50%, 70% { transform: rotate(180deg); }
+  75%, 95% { transform: rotate(270deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes letter-bounce {
+  0%, 40%, 100% { transform: translateY(0); }
+  18% { transform: translateY(-12px); }
+}
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.35; transform: scale(0.98); }
+  50% { opacity: 0.85; transform: scale(1.04); }
+}
+@keyframes sheen {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+.anim-float { animation: float-y var(--dur, 4s) ease-in-out var(--delay, 0s) infinite; }
+.anim-float-rot { animation: float-rot var(--dur, 8s) ease-in-out infinite; }
+.anim-wiggle { animation: wiggle var(--dur, 2s) ease-in-out infinite; }
+.anim-pulse { animation: pulse-scale var(--dur, 2.4s) ease-in-out var(--delay, 0s) infinite; }
+.anim-rise { animation: rise var(--dur, 16s) linear var(--delay, 0s) infinite; opacity: 0; }
+.anim-card-turn { animation: card-turn 12s ease-in-out infinite; }
+.anim-letter { animation: letter-bounce 4.1s ease-in-out var(--delay, 0s) infinite; }
+.anim-glow { animation: glow-breathe 2.6s ease-in-out infinite; }
+.anim-sheen { animation: sheen 2.4s linear infinite; }
+.anim-spin { animation: spin-slow var(--dur, 8s) linear infinite; }
+svg .anim-pulse { transform-box: fill-box; transform-origin: center; }

@@ -1,0 +1,10 @@
+node_modules
+*.log
+.DS_Store
+# видео не храним в git (добавляются вручную)
+public/videos/*.mp4
+public/videos/*.webm
+dist/videos/*.mp4
+dist/videos/*.webm
+test-results
+*.tsbuildinfo
