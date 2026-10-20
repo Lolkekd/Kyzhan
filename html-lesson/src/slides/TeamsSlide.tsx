@@ -72,8 +72,8 @@ export function TeamsSlide() {
         <span className="grid h-14 w-14 place-items-center rounded-full bg-amber/20 text-amber">
           <Hand size={30} className="animate-wave" />
         </span>
-        <span className="font-display text-[24px] font-semibold text-amber">{T.greetingTitle}</span>
-        <span className="h-6 w-px bg-white/20" />
+        <span className="font-display text-[24px] font-semibold text-[#c26a00]">{T.greetingTitle}</span>
+        <span className="h-6 w-[2px] bg-ink/25" />
         <span className="text-[23px] text-snow/80">{T.greetingText}</span>
       </motion.div>
     </div>
@@ -108,7 +108,7 @@ function TeamCard({ team, revealed, delay, onReveal, index }: { team: Team; reve
           />
           <div
             className="anim-pulse relative font-display text-[170px] font-black leading-none"
-            style={{ color: team.color, textShadow: `0 0 60px ${team.color}`, ['--pulse' as string]: 1.08, ['--delay' as string]: `${index * 0.4}s` }}
+            style={{ color: team.color, textShadow: '6px 6px 0 rgb(29 27 58)', ['--pulse' as string]: 1.08, ['--delay' as string]: `${index * 0.4}s` }}
           >
             ?
           </div>
@@ -119,15 +119,15 @@ function TeamCard({ team, revealed, delay, onReveal, index }: { team: Team; reve
         <div
           className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden rounded-[36px] px-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]"
           style={{
-            background: `linear-gradient(160deg, ${hexToRgba(team.color, 0.28)}, rgba(10,16,48,0.85) 55%)`,
-            boxShadow: `inset 0 0 0 2px ${hexToRgba(team.color, 0.6)}, 0 30px 80px -30px ${team.color}`,
+            background: `linear-gradient(160deg, ${hexToRgba(team.color, 0.3)}, #ffffff 58%)`,
+            boxShadow: `inset 0 0 0 4px rgb(29 27 58), 8px 8px 0 ${team.color}`,
           }}
         >
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full" style={{ background: `radial-gradient(circle, ${hexToRgba(team.color, 0.45)}, transparent 70%)` }} />
           <div className="relative">
             <span className="animate-pulse-ring absolute inset-0 rounded-[30px] border-2" style={{ borderColor: team.color }} />
-            <div className="grid h-32 w-32 place-items-center rounded-[30px]" style={{ background: team.color, boxShadow: `0 0 60px ${team.color}` }}>
-              <Icon size={68} className="text-ink" strokeWidth={2.2} />
+            <div className="grid h-32 w-32 place-items-center rounded-[30px]" style={{ background: team.color, border: '4px solid rgb(29 27 58)', boxShadow: '5px 5px 0 rgb(29 27 58)' }}>
+              <Icon size={68} className="text-white" strokeWidth={2.4} />
             </div>
           </div>
           <div className="mt-7 font-display text-[24px] font-semibold uppercase tracking-[0.2em]" style={{ color: team.color }}>

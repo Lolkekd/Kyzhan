@@ -208,8 +208,8 @@ function ScorePanel({ team, values, total, leader, onChange }: { team: Team; val
     <div
       className="relative flex flex-col rounded-[36px] p-7"
       style={{
-        background: `linear-gradient(170deg, ${hexToRgba(team.color, 0.18)}, rgba(10,16,48,0.88) 55%)`,
-        boxShadow: leader ? `inset 0 0 0 3px ${team.color}, 0 0 60px -10px ${team.color}` : `inset 0 0 0 2px ${hexToRgba(team.color, 0.3)}`,
+        background: `linear-gradient(170deg, ${hexToRgba(team.color, 0.22)}, #ffffff 55%)`,
+        boxShadow: leader ? `inset 0 0 0 4px rgb(29 27 58), 8px 8px 0 ${team.color}` : `inset 0 0 0 3px rgb(29 27 58), 5px 5px 0 rgb(29 27 58)`,
       }}
     >
       <AnimatePresence>

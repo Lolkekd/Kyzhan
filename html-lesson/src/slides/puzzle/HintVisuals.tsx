@@ -29,8 +29,8 @@ export function RowsColumnsHint({ color }: { color: string }) {
           y2={H - 12}
           x1={10 + c * 66.6}
           x2={10 + c * 66.6}
-          stroke="#ffffff"
-          strokeOpacity={0.75}
+          stroke="rgb(29 27 58)"
+          strokeOpacity={0.8}
           strokeWidth={6}
           strokeLinecap="round"
           initial={{ pathLength: 0 }}
@@ -38,7 +38,7 @@ export function RowsColumnsHint({ color }: { color: string }) {
           transition={{ delay: 1 + c * 0.15, duration: 0.6 }}
         />
       ))}
-      <motion.path d={`M ${W + 14} 20 v ${H - 40}`} stroke="#ffffff" strokeOpacity={0.4} strokeWidth={3} strokeDasharray="6 6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6 }} />
+      <motion.path d={`M ${W + 14} 20 v ${H - 40}`} stroke="rgb(29 27 58)" strokeOpacity={0.35} strokeWidth={3} strokeDasharray="6 6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6 }} />
     </svg>
   );
 }
@@ -81,13 +81,13 @@ export function TagsHint({ color }: { color: string }) {
         >
           <span
             className="anim-float inline-block font-mono text-[110px] font-bold leading-none"
-            style={{ color: i === 1 ? '#ffffff' : color, textShadow: `0 0 40px ${color}`, ['--float' as string]: '-8px', ['--dur' as string]: '2.4s', ['--delay' as string]: `${i * 0.3}s` }}
+            style={{ color: i === 1 ? 'rgb(29 27 58)' : color, textShadow: 'none', ['--float' as string]: '-8px', ['--dur' as string]: '2.4s', ['--delay' as string]: `${i * 0.3}s` }}
           >
             {p}
           </span>
         </motion.span>
       ))}
-      <motion.span initial={{ opacity: 0 }} animate={{ opacity: 0.55 }} transition={{ delay: 1 }} className="absolute bottom-0 font-mono text-[22px] text-snow">
+      <motion.span initial={{ opacity: 0 }} animate={{ opacity: 0.55 }} transition={{ delay: 1 }} className="absolute -bottom-7 font-mono text-[19px] text-snow">
         &lt;html&gt; &lt;body&gt; …
       </motion.span>
     </div>

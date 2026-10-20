@@ -212,13 +212,13 @@ function Tile({
         <div
           className="absolute inset-0 flex items-center gap-7 overflow-hidden rounded-[32px] px-9 [backface-visibility:hidden] [transform:rotateX(180deg)]"
           style={{
-            background: `linear-gradient(150deg, ${hexToRgba(color, 0.22)}, rgba(10,16,48,0.92) 60%)`,
-            boxShadow: `inset 0 0 0 2px ${hexToRgba(color, 0.65)}, 0 20px 60px -20px ${color}`,
+            background: `linear-gradient(150deg, ${hexToRgba(color, 0.28)}, #ffffff 60%)`,
+            boxShadow: `inset 0 0 0 4px rgb(29 27 58), 7px 7px 0 ${color}`,
           }}
         >
           <div className="h-[160px] w-[190px] shrink-0">{open && <Visual color={color} />}</div>
           <div className="min-w-0">
-            <div className="font-mono text-[20px]" style={{ color }}>
+            <div className="font-mono text-[20px] font-bold" style={{ color }}>
               {index + 1}-{T.tileLabel}
             </div>
             <div className="mt-1 font-display text-[34px] font-bold leading-tight text-snow">{hint.title}</div>
