@@ -17,11 +17,11 @@ interface Props extends Omit<HTMLMotionProps<'button'>, 'children'> {
 
 const variants: Record<Variant, string> = {
   primary:
-    'text-white bg-gradient-to-r from-electric via-[#6d6bff] to-violet shadow-[0_10px_40px_-8px_rgb(var(--c-electric)/0.7),inset_0_1px_0_rgba(255,255,255,0.35)]',
-  glass: 'text-snow glass hover:bg-white/[0.1]',
-  success: 'text-[#03140d] bg-gradient-to-r from-mint to-[#a3f7d6] shadow-[0_10px_40px_-10px_rgb(var(--c-mint)/0.8)]',
-  danger: 'text-white bg-gradient-to-r from-rose to-magenta shadow-[0_10px_40px_-10px_rgb(var(--c-rose)/0.8)]',
-  light: 'text-deep bg-white shadow-[0_10px_40px_-10px_rgba(255,255,255,0.6)]',
+    'text-white bg-electric btn-candy hover:brightness-110',
+  glass: 'text-snow glass hover:bg-[rgb(var(--c-sun))]',
+  success: 'text-white bg-mint btn-candy hover:brightness-110',
+  danger: 'text-white bg-rose btn-candy hover:brightness-110',
+  light: 'text-deep bg-white btn-candy hover:bg-[rgb(var(--c-sun))]',
 };
 
 const sizes: Record<Size, string> = {
@@ -100,8 +100,8 @@ export function IconButton({
         onClick();
       }}
       className={cn(
-        'grid shrink-0 place-items-center rounded-2xl border transition-colors',
-        active ? 'border-cyan/60 bg-cyan/20 text-cyan' : 'border-white/10 bg-white/[0.06] text-snow/80 hover:bg-white/[0.12] hover:text-white',
+        'grid shrink-0 place-items-center rounded-2xl border-[3px] shadow-[3px_3px_0_rgb(var(--c-ink))] transition-colors',
+        active ? 'border-ink bg-electric text-white' : 'border-ink bg-white text-snow hover:bg-[rgb(var(--c-sun))]',
         className,
       )}
       style={{ width: size, height: size }}

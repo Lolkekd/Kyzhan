@@ -80,8 +80,8 @@ export function PlickersSlide() {
               >
                 <motion.span
                   animate={{
-                    backgroundColor: d ? '#34d399' : 'rgba(16,26,74,0.9)',
-                    borderColor: d ? '#34d399' : 'rgba(255,255,255,0.18)',
+                    backgroundColor: d ? '#12a06a' : '#ffffff',
+                    borderColor: d ? '#12a06a' : 'rgba(29,27,58,0.25)',
                     boxShadow: d ? '0 0 50px rgba(52,211,153,0.7)' : '0 0 0 rgba(0,0,0,0)',
                   }}
                   className="relative grid h-[150px] w-[150px] place-items-center rounded-full border-4"
@@ -121,7 +121,7 @@ export function PlickersSlide() {
                   <Burst count={40} radius={460} />
                   <PartyPopper size={72} className="text-mint" />
                   <div>
-                    <div className="font-display text-[46px] font-bold text-white">{T.completeTitle}</div>
+                    <div className="font-display text-[46px] font-bold text-snow">{T.completeTitle}</div>
                     <div className="text-[26px] text-mint">{T.completeText}</div>
                   </div>
                 </motion.div>

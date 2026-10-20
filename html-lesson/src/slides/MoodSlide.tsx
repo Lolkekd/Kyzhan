@@ -8,7 +8,7 @@ import { VideoPlayer } from '../components/video/VideoPlayer';
 import { cn } from '../lib/cn';
 import { playSound } from '../lib/sound';
 
-const COLORS = ['#22d3ee', '#a78bfa', '#f472b6'];
+const COLORS = ['#0891a2', '#7b5cff', '#e0438c'];
 
 export function MoodSlide() {
   const [active, setActive] = useLessonState<number | null>('mood.question', null);
@@ -28,7 +28,7 @@ export function MoodSlide() {
 
       <div className="mt-10 grid min-h-0 flex-1 grid-cols-[1060px_1fr] gap-12">
         <motion.div initial={{ opacity: 0, scale: 0.94, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.7 }}>
-          <VideoPlayer src={settings.videos.cyberbullying} title={T.videoTitle} expectedDuration={T.videoDuration} accent="#a78bfa" />
+          <VideoPlayer src={settings.videos.cyberbullying} title={T.videoTitle} expectedDuration={T.videoDuration} accent="#7b5cff" />
           <div className="mt-4 flex items-center gap-3 text-[20px] text-snow/50">
             <HeartHandshake size={22} className="text-rose" />
             {T.videoTitle} · {T.videoDuration}

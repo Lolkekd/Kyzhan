@@ -14,8 +14,8 @@ import { SolutionView } from '../components/tasks/SolutionView';
 import { useLessonState } from '../store/lessonStore';
 
 type Tab = 'steps' | 'conditions' | 'criteria';
-const A = '#22d3ee';
-const B = '#e879f9';
+const A = '#0891a2';
+const B = '#c026d3';
 
 export function PairSlide() {
   const [tab, setTab] = useLessonState<Tab>('pair.tab', 'steps');
@@ -72,7 +72,7 @@ export function PairSlide() {
                   className="relative w-[760px] rounded-[36px] p-[3px]"
                   style={{ background: `linear-gradient(120deg, ${A}, ${B})`, boxShadow: `0 0 80px -20px ${B}` }}
                 >
-                  <div className="rounded-[33px] bg-deep/95 p-8">
+                  <div className="rounded-[33px] bg-white p-8">
                     <div className="mb-5 flex items-center gap-4">
                       <Avatar color={A} label="1" />
                       <Avatar color={B} label="2" className="-ml-7" />
@@ -212,7 +212,7 @@ function DataChips() {
           className="anim-float flex items-center gap-2 rounded-xl border border-magenta/30 bg-magenta/10 px-3 py-1 font-mono text-[18px]"
           style={{ ['--float' as string]: '-4px', ['--dur' as string]: '2.4s', ['--delay' as string]: `${i * 0.3}s` }}
         >
-          <span className="text-[#f0abfc]">&lt;td&gt;</span>
+          <span className="text-[#c026d3]">&lt;td&gt;</span>
           <span className="truncate text-snow">{r[2]}</span>
           <span className="ml-auto text-snow/40">{r[1]}</span>
         </div>

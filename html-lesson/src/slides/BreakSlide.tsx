@@ -7,15 +7,15 @@ import { playSound } from '../lib/sound';
 import { useLessonState } from '../store/lessonStore';
 
 const SHAPES = [
-  { c: '#fbbf24', x: 6, y: 18, s: 90, r: '50%', d: 7 },
-  { c: '#f472b6', x: 88, y: 12, s: 70, r: '22px', d: 9 },
-  { c: '#34d399', x: 92, y: 70, s: 110, r: '50%', d: 8 },
-  { c: '#22d3ee', x: 3, y: 74, s: 64, r: '18px', d: 10 },
-  { c: '#a78bfa', x: 48, y: 90, s: 50, r: '50%', d: 6 },
-  { c: '#fb923c', x: 70, y: 4, s: 46, r: '14px', d: 11 },
+  { c: '#e69500', x: 6, y: 18, s: 90, r: '50%', d: 7 },
+  { c: '#e0438c', x: 88, y: 12, s: 70, r: '22px', d: 9 },
+  { c: '#12a06a', x: 92, y: 70, s: 110, r: '50%', d: 8 },
+  { c: '#0891a2', x: 3, y: 74, s: 64, r: '18px', d: 10 },
+  { c: '#7b5cff', x: 48, y: 90, s: 50, r: '50%', d: 6 },
+  { c: '#ea6a1a', x: 70, y: 4, s: 46, r: '14px', d: 11 },
 ];
 const MOVE_ICONS = [Hand, RefreshCcw, Wind];
-const MOVE_COLORS = ['#fbbf24', '#f472b6', '#34d399'];
+const MOVE_COLORS = ['#e69500', '#e0438c', '#12a06a'];
 
 export function BreakSlide() {
   const [active, setActive] = useLessonState<number | null>('break.move', null);
@@ -55,7 +55,7 @@ export function BreakSlide() {
             >
               <span
                 className="anim-letter inline-block"
-                style={{ color: ['#fbbf24', '#f472b6', '#34d399', '#22d3ee', '#a78bfa'][i % 5], ['--delay' as string]: `${1 + i * 0.08}s` }}
+                style={{ color: ['#e69500', '#e0438c', '#12a06a', '#0891a2', '#7b5cff'][i % 5], ['--delay' as string]: `${1 + i * 0.08}s` }}
               >
                 {ch === ' ' ? '\u00A0' : ch}
               </span>
@@ -67,7 +67,7 @@ export function BreakSlide() {
 
       <div className="relative mt-7 flex flex-1 items-start justify-center gap-10">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, type: 'spring' }} className="w-[1060px]">
-          <VideoPlayer src={settings.videos.break} title={T.title} accent="#fbbf24" />
+          <VideoPlayer src={settings.videos.break} title={T.title} accent="#e69500" />
         </motion.div>
 
         {T.moves.length > 0 && (

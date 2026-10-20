@@ -56,8 +56,8 @@ export function CellsHint({ color }: { color: string }) {
             transition={{ delay: 0.35 + i * 0.07, type: 'spring', stiffness: 300, damping: 16 }}
             className="rounded-xl border-2"
             style={{
-              borderColor: hot ? color : 'rgba(255,255,255,0.35)',
-              background: hot ? color : 'rgba(255,255,255,0.06)',
+              borderColor: hot ? color : 'rgba(29,27,58,0.4)',
+              background: hot ? color : 'rgba(255,255,255,0.9)',
               boxShadow: hot ? `0 0 30px ${color}` : undefined,
             }}
           />

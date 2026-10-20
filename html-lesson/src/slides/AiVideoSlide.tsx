@@ -41,15 +41,15 @@ function NeuralNet({ flip }: { flip?: boolean }) {
             cx={xs[li]}
             cy={y}
             r={10}
-            fill={li === 2 ? '#e879f9' : li === 1 ? '#a78bfa' : '#22d3ee'}
+            fill={li === 2 ? '#c026d3' : li === 1 ? '#7b5cff' : '#0891a2'}
             style={{ ['--pulse' as string]: 1.3, ['--delay' as string]: `${li * 0.4 + k * 0.2}s` }}
           />
         )),
       )}
       <defs>
         <linearGradient id="nn" x1="0" x2="1">
-          <stop offset="0" stopColor="#22d3ee" />
-          <stop offset="1" stopColor="#e879f9" />
+          <stop offset="0" stopColor="#0891a2" />
+          <stop offset="1" stopColor="#c026d3" />
         </linearGradient>
       </defs>
     </svg>
@@ -64,7 +64,7 @@ export function AiVideoSlide() {
         title={T.title}
         size="md"
         right={
-          <div className="chip border-magenta/40 bg-magenta/10 text-[#f0abfc]">
+          <div className="chip border-magenta/40 bg-magenta/10 text-[#a21caf]">
             <BrainCircuit size={24} />
             {T.badge}
           </div>
@@ -83,7 +83,7 @@ export function AiVideoSlide() {
           style={{ transformPerspective: 1600 }}
           className="w-[1120px]"
         >
-          <VideoPlayer src={settings.videos.aiLesson} title={T.title} accent="#e879f9" />
+          <VideoPlayer src={settings.videos.aiLesson} title={T.title} accent="#c026d3" />
         </motion.div>
         <NeuralNet flip />
       </div>

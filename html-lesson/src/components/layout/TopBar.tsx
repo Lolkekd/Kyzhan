@@ -26,7 +26,7 @@ export function TopBar({ onOpenPanel }: { onOpenPanel: () => void }) {
   return (
     <div className="absolute inset-x-0 top-0 z-30 flex h-[80px] items-center gap-6 px-10">
       <div className="flex items-center gap-4">
-        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-electric to-violet font-mono text-[20px] font-bold shadow-[0_0_30px_-6px_rgb(var(--c-electric))]">
+        <div className="grid h-12 w-12 place-items-center rounded-2xl border-[3px] border-ink bg-rose font-mono text-[20px] font-bold text-white shadow-[3px_3px_0_rgb(var(--c-ink))]">
           &lt;/&gt;
         </div>
         <div className="leading-tight">
@@ -44,10 +44,10 @@ export function TopBar({ onOpenPanel }: { onOpenPanel: () => void }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 14 }}
               transition={{ duration: 0.3 }}
-              className="flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 font-display text-[19px] text-snow/70"
+              className="flex items-center gap-3 rounded-full border-[3px] border-ink bg-[rgb(var(--c-sun))] px-5 py-1.5 font-display text-[19px] font-semibold text-snow shadow-[3px_3px_0_rgb(var(--c-ink))]"
             >
-              <span className="font-mono text-cyan">{String(index + 1).padStart(2, '0')}</span>
-              <span className="h-4 w-px bg-white/20" />
+              <span className="font-mono text-electric">{String(index + 1).padStart(2, '0')}</span>
+              <span className="h-4 w-[2px] bg-ink/40" />
               {slide.title}
             </motion.div>
           )}

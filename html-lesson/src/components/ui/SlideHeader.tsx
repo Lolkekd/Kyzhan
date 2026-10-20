@@ -27,15 +27,15 @@ export function SlideHeader({
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <span className="h-[3px] w-12 rounded-full bg-gradient-to-r from-cyan to-violet" />
+            <span className="h-[6px] w-12 rounded-full bg-rose" />
             {eyebrow}
           </motion.div>
         )}
-        <h1 className={cn('font-display font-bold leading-[1.05] tracking-tight text-white', size === 'lg' ? 'text-[68px]' : 'text-[56px]')}>
+        <h1 className={cn('font-display font-bold leading-[1.05] tracking-tight text-snow', size === 'lg' ? 'text-[68px]' : 'text-[56px]')}>
           {words.map((w, i) => (
             <motion.span
               key={i}
-              className="mr-[0.25em] inline-block"
+              className={cn('mr-[0.25em] inline-block', i === words.length - 1 && words.length > 1 && 'marker')}
               initial={{ opacity: 0, y: 40, rotateX: -70, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.7, delay: 0.2 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}

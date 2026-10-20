@@ -8,7 +8,7 @@ import { playSound } from '../lib/sound';
 import { hexToRgba } from '../lib/cn';
 
 const GOAL_ICONS = [Table2, Code2, BookOpenCheck];
-const GOAL_COLORS = ['#22d3ee', '#a78bfa', '#f472b6'];
+const GOAL_COLORS = ['#0891a2', '#7b5cff', '#e0438c'];
 
 // Координаты станций дорожной карты (в пикселях области 1060×700)
 const MAP_W = 1060;
@@ -50,7 +50,7 @@ export function GoalsSlide() {
                   <div className="relative grid h-[84px] w-[84px] shrink-0 place-items-center rounded-[24px]" style={{ background: hexToRgba(c, 0.18), boxShadow: `inset 0 0 0 2px ${hexToRgba(c, 0.5)}` }}>
                     <Icon size={44} style={{ color: c }} />
                   </div>
-                  <div className="relative font-display text-[29px] font-medium leading-snug text-white">{g}</div>
+                  <div className="relative font-display text-[29px] font-medium leading-snug text-snow">{g}</div>
                 </motion.div>
               );
             })}
@@ -72,7 +72,7 @@ export function GoalsSlide() {
                     ))}
                   </linearGradient>
                 </defs>
-                <path d={PATH} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={22} strokeLinecap="round" />
+                <path d={PATH} fill="none" stroke="rgba(29,27,58,0.1)" strokeWidth={22} strokeLinecap="round" />
                 <motion.path
                   d={PATH}
                   fill="none"

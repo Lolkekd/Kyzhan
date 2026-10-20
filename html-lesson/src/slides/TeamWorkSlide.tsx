@@ -127,8 +127,8 @@ function TaskCard({ team, index, open, dimmed, onToggle }: { team: Team; index: 
       className="relative flex min-w-0 flex-col overflow-hidden rounded-[36px] p-8 text-left"
       style={{
         flex: open ? 2.3 : 1,
-        background: `linear-gradient(160deg, ${hexToRgba(team.color, open ? 0.25 : 0.16)}, rgba(10,16,48,0.88) 60%)`,
-        boxShadow: `inset 0 0 0 2px ${hexToRgba(team.color, open ? 0.8 : 0.35)}, 0 30px 80px -40px ${team.color}`,
+        background: `linear-gradient(160deg, ${hexToRgba(team.color, open ? 0.28 : 0.18)}, #ffffff 55%)`,
+        boxShadow: `inset 0 0 0 3px rgb(29 27 58), 7px 7px 0 ${team.color}`,
       }}
     >
       <Icon size={300} strokeWidth={1.2} className="pointer-events-none absolute -bottom-12 -right-12" style={{ color: team.color, opacity: 0.07 }} />
@@ -140,11 +140,11 @@ function TaskCard({ team, index, open, dimmed, onToggle }: { team: Team; index: 
           <div className="font-display text-[20px] font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>
             {team.number}-топ
           </div>
-          <div className="font-display text-[30px] font-bold leading-tight text-white">{team.name}</div>
+          <div className="font-display text-[30px] font-bold leading-tight text-snow">{team.name}</div>
         </div>
       </motion.div>
 
-      <motion.div layout="position" className="mt-7 font-display text-[44px] font-extrabold leading-tight text-white">
+      <motion.div layout="position" className="mt-7 font-display text-[44px] font-extrabold leading-tight text-snow">
         «{task.title}»
       </motion.div>
 

@@ -35,7 +35,7 @@ export function IndividualSlide() {
             </span>
             <span className="font-display text-[24px] font-semibold uppercase tracking-[0.18em] text-cyan">Тапсырма</span>
           </div>
-          <p className="relative mt-6 font-display text-[32px] font-semibold leading-snug text-white">{T.task}</p>
+          <p className="relative mt-6 font-display text-[32px] font-semibold leading-snug text-snow">{T.task}</p>
           <ul className="relative mt-auto space-y-3">
             {T.requirements.map((r, i) => (
               <motion.li key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 + i * 0.1 }} className="flex items-start gap-3 text-[24px] leading-snug text-snow/90">

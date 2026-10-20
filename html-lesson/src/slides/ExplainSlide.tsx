@@ -16,10 +16,10 @@ import { useLessonState } from '../store/lessonStore';
 import { playSound } from '../lib/sound';
 
 const TAG_COLORS: Record<TagKey, { hex: string; rgb: string }> = {
-  table: { hex: '#38bdf8', rgb: '56 189 248' },
-  tr: { hex: '#f59e0b', rgb: '245 158 11' },
-  th: { hex: '#a78bfa', rgb: '167 139 250' },
-  td: { hex: '#34d399', rgb: '52 211 153' },
+  table: { hex: '#0284c7', rgb: '2 132 199' },
+  tr: { hex: '#e07b00', rgb: '224 123 0' },
+  th: { hex: '#7b5cff', rgb: '123 92 255' },
+  td: { hex: '#12a06a', rgb: '18 160 106' },
 };
 const TAG_ORDER: TagKey[] = ['table', 'tr', 'th', 'td'];
 
@@ -80,7 +80,7 @@ export function ExplainSlide() {
                   style={{
                     borderColor: TAG_COLORS[tag].hex,
                     color: on ? '#030614' : TAG_COLORS[tag].hex,
-                    backgroundColor: on ? TAG_COLORS[tag].hex : 'rgba(255,255,255,0.04)',
+                    backgroundColor: on ? TAG_COLORS[tag].hex : 'rgba(255,255,255,0.9)',
                     boxShadow: on ? `0 0 30px ${TAG_COLORS[tag].hex}` : 'none',
                   }}
                 >

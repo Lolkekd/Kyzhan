@@ -100,7 +100,7 @@ export function VideoPlayer({ src, title, expectedDuration, className, accent = 
         </div>
         <div className="relative font-display text-[34px] font-semibold text-snow">Бейне әлі қосылмаған</div>
         {title && <div className="relative mt-2 text-[24px] text-snow/60">{title}</div>}
-        <div className="relative mt-6 rounded-2xl border border-white/10 bg-ink/60 px-6 py-3 font-mono text-[22px] text-cyan">
+        <div className="relative mt-6 rounded-2xl border-2 border-ink/20 bg-[#fff1c9] px-6 py-3 font-mono text-[22px] text-snow">
           public/videos/{fileName}
         </div>
         <div className="relative mt-3 text-[18px] text-snow/40">

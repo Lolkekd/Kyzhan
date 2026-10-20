@@ -35,14 +35,14 @@ export function TimerToast() {
           initial={{ opacity: 0, y: -40, x: '-50%' }}
           animate={{ opacity: 1, y: 0, x: '-50%' }}
           exit={{ opacity: 0, y: -40, x: '-50%' }}
-          className="absolute left-1/2 top-[92px] z-40 flex items-center gap-4 rounded-[24px] border border-rose/50 bg-[#2a0d1f]/95 py-3 pl-4 pr-6 shadow-[0_20px_60px_-10px_rgb(var(--c-rose)/0.6)]"
+          className="absolute left-1/2 top-[92px] z-40 flex items-center gap-4 rounded-[24px] border-[3px] border-ink bg-white py-3 pl-4 pr-6 shadow-[6px_6px_0_rgb(var(--c-rose))]"
           data-no-swipe
         >
-          <span className="anim-wiggle grid h-12 w-12 place-items-center rounded-2xl bg-rose text-ink" style={{ ['--dur' as string]: '0.8s', ['--wiggle' as string]: '-14deg' }}>
+          <span className="anim-wiggle grid h-12 w-12 place-items-center rounded-2xl border-[3px] border-ink bg-rose text-white" style={{ ['--dur' as string]: '0.8s', ['--wiggle' as string]: '-14deg' }}>
             <AlarmClock size={28} />
           </span>
-          <span className="font-display text-[26px] font-bold text-white">Уақыт бітті!</span>
-          <span className="text-[22px] text-rose">{NAMES[alert.id] ?? ''}</span>
+          <span className="font-display text-[26px] font-bold text-snow">Уақыт бітті!</span>
+          <span className="text-[22px] font-semibold text-[#d6303a]">{NAMES[alert.id] ?? ''}</span>
           <X size={22} className="ml-2 text-snow/50" />
         </motion.button>
       )}

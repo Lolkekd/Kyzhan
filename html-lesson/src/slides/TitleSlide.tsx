@@ -55,7 +55,7 @@ export function TitleSlide() {
               <motion.span
                 key={i}
                 className="text-gradient shimmer-text inline-block"
-                style={{ backgroundImage: 'linear-gradient(90deg,#67e8f9,#60a5fa,#a78bfa,#f0abfc,#67e8f9)' }}
+                style={{ backgroundImage: 'linear-gradient(90deg,#7b5cff,#d63384,#ff5a5f,#e69500,#7b5cff)' }}
                 initial={{ opacity: 0, y: 80, rotateX: -90 }}
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
                 transition={{ delay: 0.3 + i * 0.05, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -72,7 +72,7 @@ export function TitleSlide() {
             className="mt-6 flex items-center gap-6"
           >
             <span className="h-[4px] w-24 rounded-full bg-gradient-to-r from-cyan to-violet" />
-            <span className="font-display text-[64px] font-semibold text-white">{T.format}</span>
+            <span className="font-display text-[64px] font-semibold text-snow">{T.format}</span>
           </motion.div>
 
           <motion.p

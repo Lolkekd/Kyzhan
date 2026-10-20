@@ -9,7 +9,7 @@ const CELLS = Array.from({ length: 22 }).map((_, i) => ({
   size: 30 + ((i * 17) % 40),
   dur: 14 + ((i * 5) % 10),
   delay: -((i * 2.7) % 14),
-  color: ['#22d3ee', '#a78bfa', '#f472b6', '#34d399', '#fbbf24'][i % 5],
+  color: ['#0891a2', '#7b5cff', '#e0438c', '#12a06a', '#e69500'][i % 5],
 }));
 
 /** Финальный экран: спокойно поднимающиеся «ячейки» и мягкое свечение */
@@ -50,7 +50,7 @@ export function FinaleSlide() {
         transition={{ delay: 0.4, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
         className="relative font-display text-[112px] font-extrabold leading-none tracking-tight"
       >
-        <span className="shimmer-text bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg,#67e8f9,#a5b4fc,#f0abfc,#fde68a,#67e8f9)' }}>
+        <span className="shimmer-text bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg,#7b5cff,#d63384,#ff5a5f,#e69500,#7b5cff)' }}>
           {T.thanks}
         </span>
       </motion.h1>

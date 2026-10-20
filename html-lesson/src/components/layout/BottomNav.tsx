@@ -19,7 +19,7 @@ export function BottomNav() {
           return (
             <div key={g.id} className="flex flex-col items-center gap-2">
               <span
-                className={cn('font-display text-[15px] uppercase tracking-[0.16em] transition-colors', active ? 'text-snow' : 'text-snow/35')}
+                className={cn('font-display text-[15px] uppercase tracking-[0.16em] transition-colors', active ? 'text-snow' : 'text-snow/45')}
                 style={active ? { color: g.color } : undefined}
               >
                 {g.label}
@@ -41,12 +41,12 @@ export function BottomNav() {
                         className="block w-[38px] rounded-full"
                         animate={{
                           height: cur ? 14 : 8,
-                          backgroundColor: cur ? g.color : done ? `${g.color}aa` : 'rgba(255,255,255,0.14)',
-                          boxShadow: cur ? `0 0 18px ${g.color}` : '0 0 0 rgba(0,0,0,0)',
+                          backgroundColor: cur ? g.color : done ? `${g.color}aa` : 'rgba(29,27,58,0.15)',
+                          boxShadow: cur ? '0 0 0 3px rgb(29 27 58)' : '0 0 0 0 rgba(0,0,0,0)',
                         }}
                         transition={{ type: 'spring', stiffness: 300, damping: 28 }}
                       />
-                      <span className="pointer-events-none absolute bottom-9 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-xl bg-navy px-3 py-1.5 font-display text-[16px] text-snow shadow-xl group-hover:block">
+                      <span className="pointer-events-none absolute bottom-9 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-xl border-[3px] border-ink bg-white px-3 py-1.5 font-display text-[16px] text-snow shadow-[3px_3px_0_rgb(var(--c-ink))] group-hover:block">
                         {i + 1}. {s.title}
                       </span>
                     </button>
@@ -78,8 +78,8 @@ function NavButton({ dir, disabled, onClick }: { dir: 'prev' | 'next'; disabled:
       className={cn(
         'flex h-16 w-[210px] shrink-0 items-center justify-center gap-2 rounded-[20px] font-display text-[22px] font-semibold transition-opacity disabled:opacity-25',
         isNext
-          ? 'bg-gradient-to-r from-electric to-violet text-white shadow-[0_10px_34px_-10px_rgb(var(--c-electric)/0.9)]'
-          : 'glass text-snow/85',
+          ? 'bg-electric text-white btn-candy'
+          : 'glass text-snow',
       )}
     >
       {!isNext && <ChevronLeft size={28} />}

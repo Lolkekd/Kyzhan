@@ -11,7 +11,7 @@ import { playSound } from '../../lib/sound';
 import { cn, hexToRgba } from '../../lib/cn';
 import { hintVisuals } from './HintVisuals';
 
-const COLORS = ['#22d3ee', '#a78bfa', '#f472b6', '#fbbf24'];
+const COLORS = ['#0891a2', '#7b5cff', '#e0438c', '#e69500'];
 const TILE_W = 580;
 const TILE_H = 250;
 const GAP = 28;
@@ -104,7 +104,7 @@ export function PuzzleSlide() {
                     <span className="anim-wiggle grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-amber/20 text-amber">
                       <CircleQuestionMark size={40} />
                     </span>
-                    <span className="flex-1 font-display text-[29px] font-semibold leading-snug text-white">{T.question}</span>
+                    <span className="flex-1 font-display text-[29px] font-semibold leading-snug text-snow">{T.question}</span>
                     <GlowButton size="lg" icon={WandSparkles} onClick={reveal} sound={null}>
                       {T.revealButton}
                     </GlowButton>
@@ -115,7 +115,7 @@ export function PuzzleSlide() {
                       <motion.span
                         key={i}
                         className="h-4 rounded-full"
-                        animate={{ width: i < opened ? 64 : 16, backgroundColor: i < opened ? c : 'rgba(255,255,255,0.2)' }}
+                        animate={{ width: i < opened ? 64 : 16, backgroundColor: i < opened ? c : 'rgba(29,27,58,0.15)' }}
                         style={{ boxShadow: i < opened ? `0 0 16px ${c}` : 'none' }}
                       />
                     ))}
@@ -168,8 +168,8 @@ function Tile({
         <div
           className="absolute inset-0 overflow-hidden rounded-[32px] [backface-visibility:hidden]"
           style={{
-            background: 'linear-gradient(150deg, rgba(20,30,80,0.95), rgba(8,12,36,0.95))',
-            boxShadow: isNext ? `inset 0 0 0 3px ${color}, 0 0 60px -10px ${color}` : 'inset 0 0 0 2px rgba(255,255,255,0.08)',
+            background: 'linear-gradient(150deg, #ffffff, #fff1c9)',
+            boxShadow: isNext ? `inset 0 0 0 5px ${color}, 0 0 0 3px rgb(29 27 58)` : 'inset 0 0 0 3px rgba(29,27,58,0.85)',
             opacity: locked ? 0.55 : 1,
           }}
         >
@@ -193,11 +193,11 @@ function Tile({
             />
           )}
           <div className="relative flex h-full items-center gap-8 px-12">
-            <span className="font-display text-[120px] font-black leading-none" style={{ color, textShadow: `0 0 40px ${hexToRgba(color, 0.7)}` }}>
+            <span className="font-display text-[120px] font-black leading-none" style={{ color, textShadow: '4px 4px 0 rgb(29 27 58)' }}>
               {String(index + 1).padStart(2, '0')}
             </span>
             <div>
-              <div className="font-display text-[36px] font-bold text-white">
+              <div className="font-display text-[36px] font-bold text-snow">
                 {index + 1}-{T.tileLabel}
               </div>
               <div className="mt-2 flex items-center gap-2 text-[22px] text-snow/60">
@@ -221,7 +221,7 @@ function Tile({
             <div className="font-mono text-[20px]" style={{ color }}>
               {index + 1}-{T.tileLabel}
             </div>
-            <div className="mt-1 font-display text-[34px] font-bold leading-tight text-white">{hint.title}</div>
+            <div className="mt-1 font-display text-[34px] font-bold leading-tight text-snow">{hint.title}</div>
             <div className="mt-2 text-[22px] text-snow/65">{hint.caption}</div>
           </div>
         </div>
@@ -304,7 +304,7 @@ function RevealView({ animate }: { animate: boolean }) {
       >
         <span
           className="shimmer-text bg-clip-text text-transparent"
-          style={{ backgroundImage: 'linear-gradient(90deg,#67e8f9,#60a5fa,#c4b5fd,#f9a8d4,#fde68a,#67e8f9)', filter: 'drop-shadow(0 0 40px rgba(96,165,250,0.5))' }}
+          style={{ backgroundImage: 'linear-gradient(90deg,#7b5cff,#d63384,#ff5a5f,#e69500,#7b5cff)' }}
         >
           {T.topic}
         </span>

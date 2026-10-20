@@ -90,7 +90,7 @@ export function ReflectionSlide() {
                   animate={{ opacity: selected && !on ? 0.45 : 1, x: 0 }}
                   transition={{ delay: selected === null ? 0.5 + i * 0.12 : 0 }}
                   className="glass flex items-center gap-5 rounded-[28px] px-7 py-5 text-left"
-                  style={{ boxShadow: on ? `0 0 0 3px ${l.color}, 0 20px 60px -20px ${l.color}` : '0 20px 60px -20px rgba(0,0,0,0.6)', backgroundColor: on ? hexToRgba(l.color, 0.14) : 'rgba(255,255,255,0.055)' }}
+                  style={{ boxShadow: on ? `0 0 0 3px ${l.color}, 0 20px 60px -20px ${l.color}` : '0 20px 60px -20px rgba(0,0,0,0.6)', backgroundColor: on ? hexToRgba(l.color, 0.14) : 'rgba(255,255,255,0.9)' }}
                 >
                   <span className="h-10 w-10 shrink-0 rounded-full" style={{ background: l.color, boxShadow: `0 0 20px ${l.color}` }} />
                   <span className="font-display text-[34px] font-semibold">{l.label}</span>

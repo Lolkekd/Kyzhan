@@ -133,7 +133,7 @@ function TeamCard({ team, revealed, delay, onReveal, index }: { team: Team; reve
           <div className="mt-7 font-display text-[24px] font-semibold uppercase tracking-[0.2em]" style={{ color: team.color }}>
             {team.number}-топ
           </div>
-          <div className="mt-2 font-display text-[50px] font-bold leading-tight text-white">{team.name}</div>
+          <div className="mt-2 font-display text-[50px] font-bold leading-tight text-snow">{team.name}</div>
           <div className="mt-3 text-[28px] italic text-snow/75">«{team.motto}»</div>
           <div className="mt-7 flex items-center gap-1.5">
             {Array.from({ length: team.members }).map((_, k) => (

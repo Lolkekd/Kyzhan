@@ -11,7 +11,7 @@ body,
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: rgb(var(--c-ink));
+  background: rgb(var(--c-cream));
   color: rgb(var(--c-snow));
   font-family: 'Onest Variable', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -28,7 +28,7 @@ button:disabled {
   cursor: default;
 }
 :focus-visible {
-  outline: 3px solid rgb(var(--c-cyan) / 0.8);
+  outline: 4px solid rgb(var(--c-electric));
   outline-offset: 3px;
 }
 
@@ -38,20 +38,29 @@ input[type='url'] {
 }
 
 @layer components {
+  /* «Наклейка»: белая карточка с тёмной обводкой и смещённой тенью */
   .glass {
-    @apply border border-white/10 bg-white/[0.055] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur-md;
+    @apply border-[3px] border-ink bg-white shadow-[6px_6px_0_rgb(var(--c-ink))];
   }
   .glass-strong {
-    @apply border border-white/15 bg-[rgb(14_22_64/0.72)] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl;
+    @apply border-[3px] border-ink bg-white shadow-[8px_8px_0_rgb(var(--c-ink))];
   }
   .text-gradient {
-    @apply bg-gradient-to-r from-cyan via-electric to-violet bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-electric via-magenta to-rose bg-clip-text text-transparent;
   }
   .eyebrow {
-    @apply font-display text-[22px] font-medium uppercase tracking-[0.28em] text-cyan/80;
+    @apply font-display text-[22px] font-semibold uppercase tracking-[0.24em] text-rose;
   }
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-2 text-[22px] font-medium text-snow/85;
+    @apply inline-flex items-center gap-2 rounded-full border-[3px] border-ink bg-white px-5 py-2 text-[22px] font-semibold text-snow shadow-[3px_3px_0_rgb(var(--c-ink))];
+  }
+  /* жёлтый маркер под словом */
+  .marker {
+    @apply rounded-xl bg-[rgb(var(--c-sun))] px-3 shadow-[inset_0_-10px_0_rgb(var(--c-amber))];
+  }
+  /* яркая кнопка-наклейка */
+  .btn-candy {
+    @apply border-[3px] border-ink shadow-[5px_5px_0_rgb(var(--c-ink))];
   }
 }
 
@@ -111,7 +120,6 @@ input[type='url'] {
 html[data-lite='true'] .glass,
 html[data-lite='true'] .glass-strong {
   backdrop-filter: none !important;
-  background-color: rgb(14 22 64 / 0.85);
 }
 html[data-lite='true'] [data-bg-anim] {
   animation: none !important;
@@ -119,7 +127,7 @@ html[data-lite='true'] [data-bg-anim] {
 
 /* Полоса прокрутки (в панели учителя) */
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: rgb(var(--c-ink) / 0.25); border-radius: 10px; }
 
 input[type='range'] {
   -webkit-appearance: none;
@@ -130,7 +138,7 @@ input[type='range'] {
 input[type='range']::-webkit-slider-runnable-track {
   height: 8px;
   border-radius: 8px;
-  background: linear-gradient(90deg, rgb(var(--c-cyan)) var(--fill, 0%), rgb(255 255 255 / 0.18) var(--fill, 0%));
+  background: linear-gradient(90deg, rgb(var(--c-electric)) var(--fill, 0%), rgb(var(--c-ink) / 0.15) var(--fill, 0%));
 }
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -139,7 +147,8 @@ input[type='range']::-webkit-slider-thumb {
   margin-top: -7px;
   border-radius: 50%;
   background: white;
-  box-shadow: 0 0 0 4px rgb(var(--c-cyan) / 0.35);
+  border: 3px solid rgb(var(--c-ink));
+  box-shadow: 0 0 0 4px rgb(var(--c-electric) / 0.35);
 }
 input[type='range']::-moz-range-track {
   height: 8px;
@@ -216,3 +225,32 @@ input[type='range']::-moz-range-thumb {
 .anim-sheen { animation: sheen 2.4s linear infinite; }
 .anim-spin { animation: spin-slow var(--dur, 8s) linear infinite; }
 svg .anim-pulse { transform-box: fill-box; transform-origin: center; }
+
+/*
+  Светлая тема: полупрозрачные «белые» панели из тёмного дизайна превращаются в светлые карточки
+  с тонкой чернильной обводкой. Внутри тёмных островков (.on-dark) остаются как были.
+*/
+.bg-white\/10:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/15:not(.on-dark *) { background-color: rgb(var(--c-ink) / 0.08); }
+.bg-white\/20:not(.on-dark *) { background-color: rgb(var(--c-ink) / 0.08); }
+.bg-white\/\[0\.03\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/\[0\.04\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/\[0\.05\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/\[0\.06\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/\[0\.08\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.bg-white\/\[0\.14\]:not(.on-dark *) { background-color: rgb(var(--c-ink) / 0.08); }
+.bg-white\/\[0\.1\]:not(.on-dark *) { background-color: rgb(255 255 255 / 0.85); }
+.border-white\/10:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.28); }
+.border-white\/15:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.36); }
+.border-white\/20:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.44); }
+.border-white\/30:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.45); }
+.border-white\/\[0\.07\]:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.23); }
+.border-white\/\[0\.08\]:not(.on-dark *) { border-color: rgb(var(--c-ink) / 0.25); }
+.hover\:bg-white\/15:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.04\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.05\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.09\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.12\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.14\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.16\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }
+.hover\:bg-white\/\[0\.1\]:hover:not(.on-dark *) { background-color: rgb(var(--c-sun) / 0.35); }

@@ -21,7 +21,7 @@ export function Timer({ id, minutes, className, showPresets = true }: { id: stri
       <div className="relative h-[116px] w-[116px] shrink-0">
         {t.finished && <span className="animate-pulse-ring absolute inset-2 rounded-full border-4 border-rose/70" />}
         <svg viewBox="0 0 116 116" className="h-full w-full -rotate-90">
-          <circle cx="58" cy="58" r={R} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="9" />
+          <circle cx="58" cy="58" r={R} fill="none" stroke="rgba(29,27,58,0.1)" strokeWidth="9" />
           <motion.circle
             cx="58"
             cy="58"
@@ -37,7 +37,7 @@ export function Timer({ id, minutes, className, showPresets = true }: { id: stri
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono text-[30px] font-semibold tabular-nums tracking-tight" style={{ color: t.finished ? '#fb7185' : 'white' }}>
+          <span className="font-mono text-[30px] font-semibold tabular-nums tracking-tight" style={{ color: t.finished ? '#e11d48' : 'rgb(29 27 58)' }}>
             {formatTime(Math.ceil(t.remaining))}
           </span>
           <span className="font-display text-[13px] uppercase tracking-[0.14em] text-snow/50">

@@ -53,7 +53,7 @@ export function HomeworkSlide() {
           </div>
 
           <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} className="flex flex-col gap-6">
-            <div className="rounded-[28px] bg-[#0b1030] p-7 text-white">
+            <div className="on-dark rounded-[28px] border-[3px] border-ink bg-[#1d1b3a] p-7 text-white shadow-[6px_6px_0_rgb(var(--c-electric))]">
               <div className="mb-4 flex items-center gap-3 font-display text-[24px] font-semibold text-cyan">
                 <BookOpen size={28} /> Тегтер
               </div>

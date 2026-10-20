@@ -22,11 +22,11 @@ import { FinaleSlide } from '../slides/FinaleSlide';
  */
 
 export const groups = [
-  { id: 'start', label: 'Ұйымдастыру', color: '#38bdf8' },
-  { id: 'check', label: 'Тексеру', color: '#22d3ee' },
-  { id: 'new', label: 'Жаңа білім', color: '#818cf8' },
-  { id: 'practice', label: 'Практика', color: '#e879f9' },
-  { id: 'end', label: 'Қорытынды', color: '#34d399' },
+  { id: 'start', label: 'Ұйымдастыру', color: '#7b5cff' },
+  { id: 'check', label: 'Тексеру', color: '#00a08a' },
+  { id: 'new', label: 'Жаңа білім', color: '#ff5a5f' },
+  { id: 'practice', label: 'Практика', color: '#d63384' },
+  { id: 'end', label: 'Қорытынды', color: '#e08a00' },
 ] as const;
 
 export type GroupId = (typeof groups)[number]['id'];
@@ -42,11 +42,11 @@ export interface SlideDef {
 }
 
 const P = {
-  blue: ['#1d4ed8', '#7c3aed', '#0891b2'] as [string, string, string],
-  violet: ['#6d28d9', '#1d4ed8', '#be185d'] as [string, string, string],
-  cyan: ['#0e7490', '#4338ca', '#0369a1'] as [string, string, string],
-  warm: ['#7c3aed', '#c2410c', '#be185d'] as [string, string, string],
-  green: ['#047857', '#1d4ed8', '#7c3aed'] as [string, string, string],
+  blue: ['#7b5cff', '#00c2a8', '#ff5a5f'] as [string, string, string],
+  violet: ['#ff5a5f', '#7b5cff', '#00c2a8'] as [string, string, string],
+  cyan: ['#00c2a8', '#ff8fa3', '#7b5cff'] as [string, string, string],
+  warm: ['#ff8a3d', '#ff5a5f', '#7b5cff'] as [string, string, string],
+  green: ['#2bd18b', '#7b5cff', '#ff5a5f'] as [string, string, string],
 };
 
 export const slides: SlideDef[] = [
