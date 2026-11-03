@@ -1,191 +1,284 @@
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { CircleCheck, Crown, Hand, Minus, Plus, Scale, Trophy, Users } from 'lucide-react';
+import { CircleCheck, Crown, Eye, Minus, Plus, RotateCcw, Scale, Search, Trophy } from 'lucide-react';
 import { teamWorkSlide as T } from '../data/lesson';
 import { teams, type Team } from '../data/teams';
-import { settings } from '../config/settings';
 import { SlideHeader } from '../components/ui/SlideHeader';
 import { GlowButton } from '../components/ui/GlowButton';
-import { Segmented } from '../components/ui/Segmented';
 import { ConfirmButton } from '../components/ui/ConfirmButton';
 import { Modal } from '../components/ui/Modal';
-import { RichText } from '../components/ui/RichText';
 import { Timer } from '../components/timer/Timer';
 import { Burst } from '../components/animations/Burst';
+import { CodeBlock } from '../components/code/CodeBlock';
+import { EditorFrame } from '../components/code/Frames';
+import { LiveHtml, SubtaskTabs } from '../components/tasks/Practice';
 import { useLessonState } from '../store/lessonStore';
 import { playSound } from '../lib/sound';
 import { cn, hexToRgba } from '../lib/cn';
 
-type Tab = 'tasks' | 'board';
 type Scores = Record<Team['id'], number[]>;
 
 const emptyScores = (): Scores => Object.fromEntries(teams.map((t) => [t.id, T.criteria.map(() => 0)])) as Scores;
 const MAX_TOTAL = T.criteria.reduce((s, c) => s + c.points, 0);
 
 export function TeamWorkSlide() {
-  const [tab, setTab] = useLessonState<Tab>('teamwork.tab', 'tasks');
-  const [open, setOpen] = useLessonState<number | null>('teamwork.open', null);
-  const [scores, setScores] = useLessonState<Scores>('scores.values', emptyScores());
-  const [winnerOpen, setWinnerOpen] = useState(false);
-
-  const totals = teams.map((t) => (scores[t.id] ?? []).reduce((s, v) => s + v, 0));
-  const best = Math.max(...totals);
-  const leaders = best > 0 ? teams.filter((_, i) => totals[i] === best) : [];
+  const [tab, setTab] = useLessonState<string>('teamwork.tab2', T.tabs[0].id);
+  const cur = T.tabs.find((t) => t.id === tab) ?? T.tabs[0];
 
   return (
     <div className="relative flex h-full flex-col px-[100px] pt-6">
-      <SlideHeader
-        eyebrow={T.eyebrow}
-        title={T.title}
-        right={
-          <div className="flex items-center gap-6">
-            <Segmented
-              layoutId="team-tabs"
-              value={tab}
-              onChange={setTab}
-              options={[
-                { value: 'tasks', label: T.tabs.tasks },
-                { value: 'board', label: T.tabs.board },
-              ]}
-            />
-            <Timer id="team" minutes={settings.timers.team} showPresets={false} />
-          </div>
-        }
-      />
-
-      <div className="mt-6 min-h-0 flex-1 pb-6">
-        <AnimatePresence mode="wait">
-          {tab === 'tasks' ? (
-            <motion.div key="tasks" className="flex h-full gap-7" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              {teams.map((team, i) => (
-                <TaskCard
-                  key={team.id}
-                  team={team}
-                  index={i}
-                  open={open === i}
-                  dimmed={open !== null && open !== i}
-                  onToggle={() => {
-                    playSound('flip');
-                    setOpen(open === i ? null : i);
-                  }}
-                />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div key="board" className="flex h-full flex-col" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-              <div className="grid flex-1 grid-cols-3 gap-7">
-                {teams.map((team, i) => (
-                  <ScorePanel
-                    key={team.id}
-                    team={team}
-                    values={scores[team.id] ?? T.criteria.map(() => 0)}
-                    total={totals[i]}
-                    leader={leaders.length === 1 && leaders[0].id === team.id}
-                    onChange={(ci, delta) => {
-                      const cur = (scores[team.id] ?? T.criteria.map(() => 0))[ci];
-                      const nextVal = Math.max(0, Math.min(T.criteria[ci].points, cur + delta));
-                      if (nextVal === cur) return;
-                      playSound(delta > 0 ? 'plus' : 'minus');
-                      setScores((s) => {
-                        const arr = [...(s[team.id] ?? T.criteria.map(() => 0))];
-                        arr[ci] = nextVal;
-                        return { ...s, [team.id]: arr };
-                      });
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="mt-5 flex items-center justify-center gap-4">
-                <GlowButton size="lg" icon={Trophy} sound="reveal" onClick={() => setWinnerOpen(true)}>
-                  {T.winnerButton}
-                </GlowButton>
-                <ConfirmButton label="Ұпайларды тазалау" onConfirm={() => setScores(emptyScores())} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <SlideHeader eyebrow={T.eyebrow} title={T.title} right={cur.id !== 'board' && <Timer key={cur.id} id={`team-${cur.id}`} minutes={cur.minutes} showPresets={false} />} />
+      <div className="mt-4">
+        <SubtaskTabs items={T.tabs} value={tab} onChange={setTab} />
       </div>
-
-      <Modal open={winnerOpen} onClose={() => setWinnerOpen(false)} width={1500}>
-        <WinnerView leaders={leaders} best={best} />
-      </Modal>
+      <AnimatePresence mode="wait">
+        <motion.div key={cur.id} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.3 }} className="mt-5 min-h-0 flex-1 pb-6">
+          {cur.id === '3.1' && <MixedCode />}
+          {cur.id === '3.2' && <Detectives />}
+          {cur.id === '3.3' && <Quest />}
+          {cur.id === 'board' && <Board />}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
 
-function TaskCard({ team, index, open, dimmed, onToggle }: { team: Team; index: number; open: boolean; dimmed: boolean; onToggle: () => void }) {
-  const task = T.tasks[index];
-  const Icon = team.icon;
+/** Мақсаты / Барысы / Топтың міндеті */
+function Brief({ title, goal, process, task }: { title: string; goal: string; process: string; task: string }) {
+  const row = (label: string, text: string, color: string) => (
+    <div>
+      <div className="font-display text-[19px] font-bold uppercase tracking-[0.14em]" style={{ color }}>
+        {label}
+      </div>
+      <div className="mt-1 text-[23px] leading-snug">{text}</div>
+    </div>
+  );
   return (
-    <motion.button
-      type="button"
-      layout
-      onClick={onToggle}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: dimmed ? 0.6 : 1, y: 0 }}
-      transition={{ layout: { type: 'spring', stiffness: 200, damping: 26 }, delay: open || dimmed ? 0 : 0.2 + index * 0.1 }}
-      className="relative flex min-w-0 flex-col overflow-hidden rounded-[36px] p-8 text-left"
-      style={{
-        flex: open ? 2.3 : 1,
-        background: `linear-gradient(160deg, ${hexToRgba(team.color, open ? 0.28 : 0.18)}, #ffffff 55%)`,
-        boxShadow: `inset 0 0 0 3px rgb(29 27 58), 7px 7px 0 ${team.color}`,
-      }}
-    >
-      <Icon size={300} strokeWidth={1.2} className="pointer-events-none absolute -bottom-12 -right-12" style={{ color: team.color, opacity: 0.07 }} />
-      <motion.div layout="position" className="flex items-center gap-5">
-        <span className="grid h-20 w-20 shrink-0 place-items-center rounded-[24px]" style={{ background: team.color, boxShadow: `0 0 40px ${hexToRgba(team.color, 0.6)}` }}>
-          <Icon size={44} className="text-ink" />
-        </span>
-        <div className="min-w-0">
-          <div className="font-display text-[20px] font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>
-            {team.number}-топ
+    <div className="glass flex min-h-0 flex-col gap-5 rounded-[30px] p-7">
+      <div className="font-display text-[34px] font-black">{title}</div>
+      {row(T.goalLabel, goal, '#7b5cff')}
+      {row(T.processLabel, process, '#d6303a')}
+      {row(T.taskLabel, task, '#00897b')}
+    </div>
+  );
+}
+
+/** 3.1 «Аралас код»: демонстрация на доске — собрать кесінділер по порядку */
+function MixedCode() {
+  const M = T.mixed;
+  const order = [5, 2, 7, 0, 3, 6, 1, 4];
+  const [placed, setPlaced] = useLessonState<number>('teamwork.mixed', 0);
+  const [wrong, setWrong] = useState<number | null>(null);
+  const done = placed >= M.pieces.length;
+  const indent = (p: string) => (p.startsWith('<table') || p === '</table>' ? 0 : p === '<tr>' || p === '</tr>' ? 1 : 2);
+
+  const tap = (i: number) => {
+    if (i === placed) {
+      playSound(i + 1 === M.pieces.length ? 'success' : 'pop');
+      setPlaced(placed + 1);
+    } else {
+      playSound('minus');
+      setWrong(i);
+      window.setTimeout(() => setWrong(null), 450);
+    }
+  };
+
+  return (
+    <div className="grid h-full grid-cols-[560px_1fr] gap-7">
+      <Brief title={M.title} goal={M.goal} process={M.process} task={M.task} />
+      <div className="glass flex min-h-0 flex-col rounded-[30px] p-6" data-no-swipe>
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <div className="font-display text-[26px] font-bold">{M.demoTitle}</div>
+            <div className={cn('text-[19px]', done ? 'font-semibold text-mint' : 'text-snow/55')}>{done ? 'Дұрыс! Кесте дайын.' : M.demoHint}</div>
           </div>
-          <div className="font-display text-[30px] font-bold leading-tight text-snow">{team.name}</div>
+          <button type="button" onClick={() => setPlaced(0)} aria-label="Қайта бастау" className="grid h-12 w-12 place-items-center rounded-xl border-[3px] border-ink bg-white hover:bg-[rgb(var(--c-sun))]">
+            <RotateCcw size={22} />
+          </button>
         </div>
-      </motion.div>
+        <div className="mt-4 flex flex-wrap gap-3">
+          {order
+            .filter((i) => i >= placed)
+            .map((i) => (
+              <motion.button
+                key={i}
+                type="button"
+                layout
+                onClick={() => tap(i)}
+                animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], rotate: 0 } : { x: 0, rotate: (i % 3) - 1 }}
+                className={cn('rounded-lg border-[3px] px-4 py-2 font-mono text-[24px] font-semibold', wrong === i ? 'border-rose bg-rose/15' : 'border-ink bg-[#fff1c9] shadow-[3px_3px_0_rgb(var(--c-ink))] hover:bg-[rgb(var(--c-sun))]')}
+              >
+                {M.pieces[i]}
+              </motion.button>
+            ))}
+        </div>
+        <div className="mt-4 grid min-h-0 flex-1 grid-cols-2 gap-5">
+          <EditorFrame>
+            <CodeBlock lines={M.pieces.slice(0, placed).map((p) => ({ text: p, indent: indent(p) }))} fontSize={24} />
+          </EditorFrame>
+          {done ? <LiveHtml html={M.pieces.join('')} fontSize={48} /> : <div className="grid place-items-center rounded-[28px] border-[3px] border-dashed border-ink/25 bg-white/60 font-display text-[80px] font-black text-ink/15">?</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      <motion.div layout="position" className="mt-7 font-display text-[44px] font-extrabold leading-tight text-snow">
-        «{task.title}»
-      </motion.div>
+/** 3.2 «IT детективтері»: найти 5 ошибок в коде */
+function Detectives() {
+  const D = T.detective;
+  const errIdx = D.lines.map((l, i) => (l.fix ? i : -1)).filter((i) => i >= 0);
+  const [found, setFound] = useLessonState<number[]>('teamwork.detective', []);
+  const [miss, setMiss] = useState<number | null>(null);
+  const lines = D.lines.map((l, i) => ({ text: found.includes(i) && l.fix ? l.fix.trimStart() : l.text.trimStart(), indent: Math.floor((l.text.match(/^ */)![0].length) / 2) }));
 
-      <AnimatePresence mode="popLayout">
-        {open ? (
-          <motion.div key="details" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.15 }} className="mt-5 grid flex-1 grid-cols-[1.25fr_1fr] gap-8">
-            <div>
-              <p className="text-[27px] leading-snug text-snow/90">{task.text}</p>
-              <ul className="mt-5 space-y-3">
-                {task.requirements.map((r) => (
-                  <li key={r} className="flex items-start gap-3 text-[23px] leading-snug text-snow/85">
-                    <CircleCheck size={26} className="mt-0.5 shrink-0" style={{ color: team.color }} />
-                    <RichText text={r} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-[26px] bg-white/[0.05] p-6">
-              <div className="mb-4 flex items-center gap-3 font-display text-[24px] font-semibold">
-                <Users size={28} style={{ color: team.color }} /> {T.rolesTitle}
-              </div>
-              <ul className="space-y-3">
-                {T.roles.map((r) => (
-                  <li key={r} className="rounded-xl bg-white/[0.06] px-4 py-2 text-[22px] text-snow/90">
-                    {r}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div key="hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 flex flex-1 flex-col">
-            {!dimmed && <p className="text-[26px] leading-snug text-snow/75">{task.text}</p>}
-            <div className="mt-auto flex items-center gap-3 text-[22px] text-snow/55">
-              <Hand size={26} style={{ color: team.color }} />
-              {T.tapToOpen}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.button>
+  const click = (i: number) => {
+    if (found.includes(i)) return;
+    if (D.lines[i].fix) {
+      playSound(found.length + 1 === errIdx.length ? 'success' : 'pop');
+      setFound([...found, i]);
+    } else {
+      playSound('minus');
+      setMiss(i);
+      window.setTimeout(() => setMiss(null), 600);
+    }
+  };
+
+  return (
+    <div className="grid h-full grid-cols-[480px_1fr_430px] gap-6">
+      <Brief title={D.title} goal={D.goal} process={D.process} task={D.task} />
+      <div className="flex min-h-0 flex-col" data-no-swipe>
+        <div className="mb-3 flex items-center gap-2 text-[19px] text-snow/60">
+          <Search size={22} /> {D.hint}
+        </div>
+        <EditorFrame className="min-h-0 flex-1" file="tauarlar.html">
+          <CodeBlock
+            lines={lines}
+            fontSize={23}
+            onLineClick={(_, i) => click(i)}
+            highlight={(_, i) => (found.includes(i) ? 2 : miss === i ? 1 : 0)}
+            highlightColor={miss !== null ? '255 90 95' : '52 211 153'}
+          />
+        </EditorFrame>
+      </div>
+      <div className="glass flex min-h-0 flex-col rounded-[30px] p-6">
+        <div className="font-display text-[22px] font-bold">{D.found}</div>
+        <div className="mt-1 font-display text-[64px] font-black leading-none">
+          {found.length}
+          <span className="text-[34px] text-snow/40"> / {errIdx.length}</span>
+        </div>
+        <div className="mt-4 flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
+          <AnimatePresence>
+            {[...found].sort((a, b) => a - b).map((i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="flex gap-2 rounded-xl border-2 border-ink/20 bg-white px-3 py-2 text-[18px] leading-snug">
+                <CircleCheck size={22} className="mt-0.5 shrink-0 text-mint" />
+                <span>
+                  <b>{i + 1}-жол:</b> {D.lines[i].why}
+                </span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+        <div className="mt-3 flex gap-2">
+          <GlowButton size="sm" variant="success" icon={Eye} className="flex-1" onClick={() => setFound(errIdx)}>
+            {D.showAll}
+          </GlowButton>
+          <button type="button" onClick={() => setFound([])} aria-label={D.reset} className="grid h-12 w-12 place-items-center rounded-xl border-[3px] border-ink bg-white hover:bg-[rgb(var(--c-sun))]">
+            <RotateCcw size={22} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** 3.3 Квест: 5 сұрақ, жауап басқанда ашылады */
+function Quest() {
+  const Q = T.quest;
+  const [open, setOpen] = useLessonState<number[]>('teamwork.quest', []);
+  const colors = ['#7b5cff', '#ff5a5f', '#00a08a', '#e69500', '#d63384'];
+  return (
+    <div className="flex h-full flex-col gap-4">
+      <div className="flex items-center gap-4 text-[22px]">
+        <span className="font-display text-[26px] font-bold">{Q.title}</span>
+        <span className="text-snow/60">{Q.text}</span>
+      </div>
+      <div className="grid min-h-0 flex-1 grid-cols-5 gap-5">
+        {Q.questions.map((it, i) => {
+          const on = open.includes(i);
+          return (
+            <motion.button
+              key={i}
+              type="button"
+              onClick={() => {
+                playSound(on ? 'click' : 'flip');
+                setOpen(on ? open.filter((x) => x !== i) : [...open, i]);
+              }}
+              whileHover={{ y: -4 }}
+              className="flex flex-col rounded-[28px] border-[3px] border-ink p-5 text-left"
+              style={{ background: on ? hexToRgba(colors[i], 0.16) : '#ffffff', boxShadow: `6px 6px 0 ${colors[i]}` }}
+            >
+              <span className="grid h-14 w-14 place-items-center rounded-2xl border-[3px] border-ink font-display text-[28px] font-black text-white" style={{ background: colors[i] }}>
+                {i + 1}
+              </span>
+              <span className="mt-4 font-display text-[25px] font-bold leading-snug">{it.q}</span>
+              <AnimatePresence>
+                {on ? (
+                  <motion.span initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-auto rounded-2xl bg-white px-4 py-3 text-[20px] font-semibold leading-snug" style={{ boxShadow: `inset 4px 0 0 ${colors[i]}` }}>
+                    {it.a}
+                  </motion.span>
+                ) : (
+                  <span className="mt-auto text-[17px] text-snow/45">{Q.hint}</span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** Ұпай тақтасы */
+function Board() {
+  const [scores, setScores] = useLessonState<Scores>('scores.values2', emptyScores());
+  const [winnerOpen, setWinnerOpen] = useState(false);
+  const totals = teams.map((t) => (scores[t.id] ?? []).reduce((s, v) => s + v, 0));
+  const best = Math.max(...totals);
+  const leaders = best > 0 ? teams.filter((_, i) => totals[i] === best) : [];
+  return (
+    <div className="flex h-full flex-col">
+      <div className="grid flex-1 grid-cols-3 gap-7">
+        {teams.map((team, i) => (
+          <ScorePanel
+            key={team.id}
+            team={team}
+            values={scores[team.id] ?? T.criteria.map(() => 0)}
+            total={totals[i]}
+            leader={leaders.length === 1 && leaders[0].id === team.id}
+            onChange={(ci, delta) => {
+              const cur = (scores[team.id] ?? T.criteria.map(() => 0))[ci];
+              const nextVal = Math.max(0, Math.min(T.criteria[ci].points, cur + delta));
+              if (nextVal === cur) return;
+              playSound(delta > 0 ? 'plus' : 'minus');
+              setScores((s) => {
+                const arr = [...(s[team.id] ?? T.criteria.map(() => 0))];
+                arr[ci] = nextVal;
+                return { ...s, [team.id]: arr };
+              });
+            }}
+          />
+        ))}
+      </div>
+      <div className="mt-5 flex items-center justify-center gap-4">
+        <GlowButton size="lg" icon={Trophy} sound="reveal" onClick={() => setWinnerOpen(true)}>
+          {T.winnerButton}
+        </GlowButton>
+        <ConfirmButton label="Ұпайларды тазалау" onConfirm={() => setScores(emptyScores())} />
+      </div>
+      <Modal open={winnerOpen} onClose={() => setWinnerOpen(false)} width={1500}>
+        <WinnerView leaders={leaders} best={best} />
+      </Modal>
+    </div>
   );
 }
 
@@ -218,8 +311,8 @@ function ScorePanel({ team, values, total, leader, onChange }: { team: Team; val
             initial={{ y: 20, opacity: 0, scale: 0.5 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.5 }}
-            className="absolute -top-6 left-1/2 flex items-center gap-2 rounded-full px-4 py-1.5 font-display text-[18px] font-bold text-ink"
-            style={{ x: '-50%', background: team.color, boxShadow: `0 0 30px ${team.color}` }}
+            className="absolute -top-6 left-1/2 flex items-center gap-2 rounded-full border-[3px] border-ink px-4 py-1.5 font-display text-[18px] font-bold text-white"
+            style={{ x: '-50%', background: team.color }}
           >
             <Crown size={22} /> {T.leader}
           </motion.div>
@@ -228,7 +321,7 @@ function ScorePanel({ team, values, total, leader, onChange }: { team: Team; val
 
       <div className="flex items-center gap-4">
         <span className="grid h-16 w-16 place-items-center rounded-[20px]" style={{ background: team.color }}>
-          <Icon size={36} className="text-ink" />
+          <Icon size={36} className="text-white" />
         </span>
         <div className="min-w-0">
           <div className="font-display text-[18px] uppercase tracking-[0.18em]" style={{ color: team.color }}>
@@ -242,7 +335,7 @@ function ScorePanel({ team, values, total, leader, onChange }: { team: Team; val
         <motion.span
           key={total}
           initial={{ scale: 1.35, color: team.color }}
-          animate={{ scale: 1, color: '#ffffff' }}
+          animate={{ scale: 1, color: '#1d1b3a' }}
           transition={{ type: 'spring', stiffness: 300, damping: 14 }}
           className="origin-bottom-left font-display text-[96px] font-extrabold leading-none tabular-nums"
         >
