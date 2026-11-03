@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, MotionConfig, motion } from 'motion/react';
-import { slides } from './config/slides';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, MotionConfig, motion, type Variants } from 'motion/react';
 import { lessonStore, useLesson } from './store/lessonStore';
 import { playSound } from './lib/sound';
 import { ScaledStage } from './components/layout/ScaledStage';
@@ -8,53 +7,96 @@ import { NavContext, type Nav } from './components/layout/NavContext';
 import { TopBar, toggleFullscreen } from './components/layout/TopBar';
 import { BottomNav } from './components/layout/BottomNav';
 import { TeacherPanel } from './components/layout/TeacherPanel';
-import { Background } from './components/animations/Background';
 import { useTimerWatcher } from './components/timer/useTimer';
 import { TimerToast } from './components/timer/TimerToast';
+import { setUI, useDeck, useUI } from './editor/store';
+import { maxStep, SlideBody } from './editor/render';
+import { SlideBackground } from './editor/SlideBackground';
+import type { Transition } from './editor/types';
 
-const slideVariants = {
-  enter: (d: number) => ({ opacity: 0, x: d * 260, rotateY: d * -22, scale: 0.92, pointerEvents: 'none' as const }),
-  center: { opacity: 1, x: 0, rotateY: 0, scale: 1, pointerEvents: 'auto' as const },
-  exit: (d: number) => ({ opacity: 0, x: d * -260, rotateY: d * 22, scale: 0.92, pointerEvents: 'none' as const }),
+const Editor = lazy(() => import('./editor/Editor'));
+
+/** Переходы между слайдами (настраиваются для каждого слайда в редакторе) */
+const VARIANTS: Record<Transition, Variants> = {
+  flip: {
+    enter: (d) => ({ opacity: 0, x: d * 260, rotateY: d * -22, scale: 0.92 }),
+    center: { opacity: 1, x: 0, rotateY: 0, scale: 1 },
+    exit: (d) => ({ opacity: 0, x: d * -260, rotateY: d * 22, scale: 0.92 }),
+  },
+  slide: {
+    enter: (d) => ({ opacity: 1, x: d * 1920 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d) => ({ opacity: 1, x: d * -1920 }),
+  },
+  fade: { enter: () => ({ opacity: 0 }), center: { opacity: 1 }, exit: () => ({ opacity: 0 }) },
+  zoom: { enter: () => ({ opacity: 0, scale: 0.8 }), center: { opacity: 1, scale: 1 }, exit: () => ({ opacity: 0, scale: 1.15 }) },
+  none: { enter: () => ({ opacity: 1 }), center: { opacity: 1 }, exit: () => ({ opacity: 0, transition: { duration: 0 } }) },
 };
 
 /** Элементы, внутри которых свайп/клавиши НЕ переключают слайд */
 const INTERACTIVE = 'button, a, input, textarea, select, video, [data-no-swipe], [contenteditable="true"]';
 
 export default function App() {
+  const mode = useUI((u) => u.mode);
+  useTimerWatcher();
+  if (mode === 'edit')
+    return (
+      <Suspense fallback={null}>
+        <Editor />
+      </Suspense>
+    );
+  return <Viewer />;
+}
+
+function Viewer() {
+  const deck = useDeck();
   const stored = useLesson((s) => s.slide);
   const lite = useLesson((s) => s.lite);
-  const index = Math.min(Math.max(0, stored), slides.length - 1);
+  const index = Math.min(Math.max(0, stored), Math.max(0, deck.length - 1));
   const [panelOpen, setPanelOpen] = useState(false);
   const [dir, setDir] = useState(1);
+  /** шаг появления элементов «по нажатию» на текущем слайде */
+  const [step, setStep] = useState(0);
   const swipe = useRef<{ x: number; y: number; t: number } | null>(null);
-
-  useTimerWatcher();
+  const item = deck[index];
+  const steps = item ? maxStep(item.inst) : 0;
 
   useEffect(() => {
     document.documentElement.dataset.lite = String(lite);
   }, [lite]);
 
-  const goTo = useCallback((i: number) => {
-    const cur = lessonStore.get().slide;
-    if (i < 0 || i >= slides.length || i === cur) return;
-    setDir(i > cur ? 1 : -1);
-    playSound('nav');
-    lessonStore.update({ slide: i });
-  }, []);
+  const goTo = useCallback(
+    (i: number, atEnd = false) => {
+      const cur = lessonStore.get().slide;
+      if (i < 0 || i >= deck.length || i === cur) return;
+      setDir(i > cur ? 1 : -1);
+      setStep(atEnd ? maxStep(deck[i].inst) : 0);
+      playSound('nav');
+      lessonStore.update({ slide: i });
+    },
+    [deck],
+  );
 
   const nav: Nav = useMemo(
     () => ({
       index,
-      total: slides.length,
-      goTo,
-      next: () => goTo(lessonStore.get().slide + 1),
-      prev: () => goTo(lessonStore.get().slide - 1),
+      total: deck.length,
+      goTo: (i: number) => goTo(i),
+      next: () => {
+        if (step < steps) {
+          playSound('pop');
+          setStep(step + 1);
+        } else goTo(lessonStore.get().slide + 1);
+      },
+      prev: () => {
+        if (step > 0) setStep(step - 1);
+        else goTo(lessonStore.get().slide - 1, true);
+      },
     }),
-    [index, goTo],
+    [index, deck.length, goTo, step, steps],
   );
 
-  // Клавиатура: стрелки / PageUp / PageDown (пульт-презентер), F, T, M, Home, End, Esc
+  // Клавиатура: стрелки / PageUp / PageDown (пульт-презентер), F, T, M, E (редактор), Home, End, Esc
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
@@ -64,22 +106,24 @@ export default function App() {
       if (key === 'Escape') return setPanelOpen(false);
       if (key === 't' || key === 'T' || key === 'е' || key === 'Е') return setPanelOpen((v) => !v);
       if (panelOpen) return;
-      if (key === 'ArrowRight' || key === 'PageDown') {
+      if (key === 'ArrowRight' || key === 'PageDown' || key === ' ') {
         e.preventDefault();
         nav.next();
       } else if (key === 'ArrowLeft' || key === 'PageUp') {
         e.preventDefault();
         nav.prev();
       } else if (key === 'Home') goTo(0);
-      else if (key === 'End') goTo(slides.length - 1);
+      else if (key === 'End') goTo(deck.length - 1);
       else if (key === 'f' || key === 'F' || key === 'а' || key === 'А') toggleFullscreen();
       else if (key === 'm' || key === 'M' || key === 'ь' || key === 'Ь') lessonStore.update((s) => ({ sound: !s.sound }));
+      else if (key === 'e' || key === 'E' || key === 'у' || key === 'У') openEditor(item?.id);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [nav, goTo, panelOpen]);
+  }, [nav, goTo, panelOpen, deck.length, item]);
 
-  const Slide = slides[index].component;
+  if (!item) return <ScaledStage>{null}</ScaledStage>;
+  const variants = VARIANTS[item.inst.transition ?? 'flip'];
 
   return (
     <MotionConfig reducedMotion="user">
@@ -107,22 +151,22 @@ export default function App() {
               }
             }}
           >
-            <Background palette={slides[index].palette} />
-            <TopBar onOpenPanel={() => setPanelOpen(true)} />
+            <SlideBackground inst={item.inst} palette={item.palette} />
+            <TopBar onOpenPanel={() => setPanelOpen(true)} onEdit={() => openEditor(item.id)} />
 
             <div className="absolute inset-x-0 bottom-[100px] top-[80px] [perspective:2000px]">
               <AnimatePresence initial={false} custom={dir}>
                 <motion.div
-                  key={slides[index].id}
+                  key={item.id}
                   custom={dir}
-                  variants={slideVariants}
+                  variants={variants}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: item.inst.transition === 'none' ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0"
                 >
-                  <Slide />
+                  <SlideBody inst={item.inst} step={step} />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -135,4 +179,8 @@ export default function App() {
       </NavContext.Provider>
     </MotionConfig>
   );
+}
+
+export function openEditor(slideId?: string) {
+  setUI({ mode: 'edit', sel: null, interact: false, ...(slideId ? { cur: slideId } : {}) });
 }

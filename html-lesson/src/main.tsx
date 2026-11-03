@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { initProject } from './editor/store';
 import './styles/index.css';
 
 // Заранее подгружаем шрифты с казахскими буквами, чтобы они не «мигали» при первом показе
@@ -9,8 +10,13 @@ for (const font of ['400 1em "Onest Variable"', '700 1em "Onest Variable"', '700
   void document.fonts?.load(font, sample).catch(() => undefined);
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Сначала загружаем проект редактора (сохранённые изменения), затем показываем презентацию
+void initProject()
+  .catch(() => undefined)
+  .then(() => {
+    createRoot(document.getElementById('root')!).render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    );
+  });

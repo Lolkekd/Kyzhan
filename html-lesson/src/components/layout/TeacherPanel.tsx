@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ExternalLink, Feather, Keyboard, Link, Puzzle, Sparkles, Timer, Trophy, Volume2, X } from 'lucide-react';
-import { groups, slides } from '../../config/slides';
+import { groups } from '../../config/slides';
+import { useDeck } from '../../editor/store';
 import { settings } from '../../config/settings';
 import { cn } from '../../lib/cn';
 import { playSound } from '../../lib/sound';
@@ -12,6 +13,7 @@ import { useNav } from './NavContext';
 /** Панель учителя: быстрый переход к этапу, настройки и сброс результатов */
 export function TeacherPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { index, goTo } = useNav();
+  const slides = useDeck();
   const sound = useLesson((s) => s.sound);
   const lite = useLesson((s) => s.lite);
   const plickersUrl = useLesson((s) => s.plickersUrl);

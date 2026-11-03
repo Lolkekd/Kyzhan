@@ -1,4 +1,5 @@
 import { useCallback, useSyncExternalStore } from 'react';
+import { useSlideInst } from '../editor/instCtx';
 import { settings } from '../config/settings';
 
 /**
@@ -96,6 +97,9 @@ type SetStateAction<T> = T | ((prev: T) => T);
 
 /** Как useState, но значение живёт в общем хранилище урока и не теряется при смене слайдов */
 export function useLessonState<T>(key: string, initial: T): [T, (v: SetStateAction<T>) => void] {
+  // копия слайда хранит свои ответы/баллы отдельно от оригинала
+  const inst = useSlideInst();
+  if (inst && inst.base && inst.id !== inst.base) key = `${inst.id}|${key}`;
   const value = useSyncExternalStore(lessonStore.subscribe, () => lessonStore.get().kv[key]) as T | undefined;
   const set = useCallback(
     (v: SetStateAction<T>) => {

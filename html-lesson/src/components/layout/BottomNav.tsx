@@ -1,12 +1,14 @@
 import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { groups, slides } from '../../config/slides';
+import { groups } from '../../config/slides';
+import { useDeck } from '../../editor/store';
 import { cn } from '../../lib/cn';
 import { useNav } from './NavContext';
 
 /** Нижняя панель: «Алдыңғы» / «Келесі» и индикатор прогресса по этапам урока */
 export function BottomNav() {
   const { index, total, goTo, next, prev } = useNav();
+  const slides = useDeck();
 
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-[100px] items-center gap-8 px-10">
