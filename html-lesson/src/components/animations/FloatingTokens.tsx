@@ -1,10 +1,13 @@
 import { memo } from 'react';
+import { useLesson } from '../../store/lessonStore';
 
 // Только «нейтральные» теги — тема урока не раскрывается раньше времени!
 const TOKENS = ['<html>', '</>', '<body>', '{ }', '<h1>', '<p>', 'href=""', '<div>', '<head>', '#fff', '<!-- -->', '<a>', '<br>', 'class=""', '<ul>', '<img>'];
 
 /** Плавающие полупрозрачные фрагменты кода на фоне */
 export const FloatingTokens = memo(function FloatingTokens({ count = 14, opacity = 0.22, className = 'inset-0' }: { count?: number; opacity?: number; className?: string }) {
+  const lite = useLesson((st) => st.lite);
+  if (lite) return null;
   return (
     <div className={`pointer-events-none absolute overflow-hidden ${className}`} aria-hidden>
       {Array.from({ length: count }).map((_, i) => {

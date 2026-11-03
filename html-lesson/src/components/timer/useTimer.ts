@@ -31,7 +31,7 @@ export function useTimer(id: string, defaultMinutes: number) {
 
   useEffect(() => {
     if (!t.running) return;
-    const iv = window.setInterval(() => setNow(Date.now()), 200);
+    const iv = window.setInterval(() => setNow(Date.now()), lessonStore.get().lite ? 1000 : 200);
     return () => window.clearInterval(iv);
   }, [t.running]);
 

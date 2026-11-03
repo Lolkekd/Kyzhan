@@ -28,14 +28,33 @@ const defaults: LessonState = {
   kv: {},
 };
 
+/** Слабый компьютер / интерактивная доска: мало ядер или памяти, либо ?lite=1 в адресе */
+function weakDevice() {
+  try {
+    if (new URLSearchParams(location.search).get('lite') === '1') return true;
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    return (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
+  } catch {
+    return false;
+  }
+}
+
 function load(): LessonState {
+  const forced = (() => {
+    try {
+      return new URLSearchParams(location.search).get('lite');
+    } catch {
+      return null;
+    }
+  })();
+  const base = { ...defaults, lite: forced ? forced === '1' : weakDevice() };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaults;
+    if (!raw) return base;
     const parsed = JSON.parse(raw) as Partial<LessonState>;
-    return { ...defaults, ...parsed, kv: { ...(parsed.kv ?? {}) } };
+    return { ...base, ...parsed, ...(forced ? { lite: forced === '1' } : {}), kv: { ...(parsed.kv ?? {}) } };
   } catch {
-    return defaults;
+    return base;
   }
 }
 

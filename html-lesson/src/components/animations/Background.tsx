@@ -1,11 +1,22 @@
 import { memo } from 'react';
+import { useLesson } from '../../store/lessonStore';
 
 /**
  * Светлый «конфетный» фон: кремовая бумага в точку и крупные цветные фигуры-наклейки по краям.
  * Цвета фигур берутся из палитры слайда; фигуры медленно покачиваются (только CSS transform).
  */
 export const Background = memo(function Background({ palette }: { palette: [string, string, string] }) {
+  const lite = useLesson((s) => s.lite);
   const [a, b, c] = palette;
+  // лёгкий режим: только бумага в точку, без фигур и цветных пятен
+  if (lite)
+    return (
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden
+        style={{ backgroundColor: 'rgb(var(--c-cream))', backgroundImage: 'radial-gradient(rgb(var(--c-ink) / 0.09) 2.5px, transparent 2.5px)', backgroundSize: '36px 36px' }}
+      />
+    );
   const ink = 'rgb(var(--c-ink))';
   const shape = (style: React.CSSProperties, cls: string, dur: string, delay = '0s') => (
     <div

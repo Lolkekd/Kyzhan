@@ -91,7 +91,7 @@ export function TeacherPanel({ open, onClose }: { open: boolean; onClose: () => 
                 <Toggle
                   icon={Feather}
                   label="Жеңіл режим"
-                  hint="Для слабого компьютера: меньше эффектов"
+                  hint="Для слабой доски: без фоновых анимаций, размытия и теней (клавиша L)"
                   value={lite}
                   onChange={(v) => lessonStore.update({ lite: v })}
                 />

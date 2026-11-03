@@ -117,16 +117,18 @@ function Viewer() {
       else if (key === 'f' || key === 'F' || key === 'а' || key === 'А') toggleFullscreen();
       else if (key === 'm' || key === 'M' || key === 'ь' || key === 'Ь') lessonStore.update((s) => ({ sound: !s.sound }));
       else if (key === 'e' || key === 'E' || key === 'у' || key === 'У') openEditor(item?.id);
+      else if (key === 'l' || key === 'L' || key === 'д' || key === 'Д') lessonStore.update((s) => ({ lite: !s.lite }));
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [nav, goTo, panelOpen, deck.length, item]);
 
   if (!item) return <ScaledStage>{null}</ScaledStage>;
-  const variants = VARIANTS[item.inst.transition ?? 'flip'];
+  // в лёгком режиме — короткое растворение вместо объёмных переходов
+  const variants = lite ? VARIANTS.fade : VARIANTS[item.inst.transition ?? 'flip'];
 
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={lite ? 'always' : 'user'}>
       <NavContext.Provider value={nav}>
         <ScaledStage>
           <div
@@ -154,7 +156,7 @@ function Viewer() {
             <SlideBackground inst={item.inst} palette={item.palette} />
             <TopBar onOpenPanel={() => setPanelOpen(true)} onEdit={() => openEditor(item.id)} />
 
-            <div className="absolute inset-x-0 bottom-[100px] top-[80px] [perspective:2000px]">
+            <div className={`absolute inset-x-0 bottom-[100px] top-[80px] ${lite ? '' : '[perspective:2000px]'}`}>
               <AnimatePresence initial={false} custom={dir}>
                 <motion.div
                   key={item.id}
@@ -163,7 +165,7 @@ function Viewer() {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: item.inst.transition === 'none' ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: lite ? 0.15 : item.inst.transition === 'none' ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0"
                 >
                   <SlideBody inst={item.inst} step={step} />

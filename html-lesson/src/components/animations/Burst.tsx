@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
+import { useLesson } from '../../store/lessonStore';
 
 /** Разлёт частиц из центра (празднование, раскрытие темы) */
 export function Burst({ count = 36, colors = ['#22d3ee', '#a855f7', '#f472b6', '#fbbf24', '#34d399'], radius = 520, size = 14 }: { count?: number; colors?: string[]; radius?: number; size?: number }) {
+  const lite = useLesson((s) => s.lite);
   const parts = useMemo(
     () =>
       Array.from({ length: count }).map((_, i) => {
@@ -20,6 +22,7 @@ export function Burst({ count = 36, colors = ['#22d3ee', '#a855f7', '#f472b6', '
       }),
     [count, colors, radius, size],
   );
+  if (lite) return null;
   return (
     <div className="pointer-events-none absolute left-1/2 top-1/2" aria-hidden>
       {parts.map((p, i) => (

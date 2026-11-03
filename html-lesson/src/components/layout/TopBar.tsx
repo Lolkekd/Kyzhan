@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { LayoutGrid, Maximize, Minimize, PencilRuler, Volume2, VolumeX } from 'lucide-react';
+import { Feather, LayoutGrid, Maximize, Minimize, PencilRuler, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDeck } from '../../editor/store';
 import { lessonStore, useLesson } from '../../store/lessonStore';
@@ -15,6 +15,7 @@ export function TopBar({ onOpenPanel, onEdit }: { onOpenPanel: () => void; onEdi
   const { index } = useNav();
   const slides = useDeck();
   const sound = useLesson((s) => s.sound);
+  const lite = useLesson((s) => s.lite);
   const [fs, setFs] = useState(!!document.fullscreenElement);
   const slide = slides[index] ?? slides[0];
 
@@ -62,6 +63,7 @@ export function TopBar({ onOpenPanel, onEdit }: { onOpenPanel: () => void; onEdi
           active={sound}
           onClick={() => lessonStore.update((s) => ({ sound: !s.sound }))}
         />
+        <IconButton icon={Feather} label={lite ? 'Жеңіл режим қосулы — өшіру (L)' : 'Жеңіл режим — әлсіз тақта үшін (L)'} active={lite} onClick={() => lessonStore.update((s) => ({ lite: !s.lite }))} />
         {onEdit && <IconButton icon={PencilRuler} label="Редактор (E)" onClick={onEdit} />}
         <IconButton icon={LayoutGrid} label="Мұғалім панелі (T)" onClick={onOpenPanel} />
         <IconButton icon={fs ? Minimize : Maximize} label="Толық экран (F)" onClick={toggleFullscreen} />

@@ -117,12 +117,33 @@ input[type='url'] {
 }
 
 /* «Жеңіл режим» — для слабых компьютеров: без размытия и фоновых анимаций */
-html[data-lite='true'] .glass,
-html[data-lite='true'] .glass-strong {
-  backdrop-filter: none !important;
-}
-html[data-lite='true'] [data-bg-anim] {
+/*
+  ЛЁГКИЙ РЕЖИМ — для слабой интерактивной доски / старого компьютера.
+  Выключаем всё, что постоянно нагружает видеокарту: бесконечные анимации, размытие, мягкие тени, фильтры.
+  Внешний вид (цвета, обводки, «наклейки») остаётся тем же.
+*/
+html[data-lite='true'] *,
+html[data-lite='true'] *::before,
+html[data-lite='true'] *::after {
   animation: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  scroll-behavior: auto !important;
+}
+html[data-lite='true'] [class*='blur'],
+html[data-lite='true'] [style*='blur('],
+html[data-lite='true'] [style*='drop-shadow'] {
+  filter: none !important;
+}
+html[data-lite='true'] [class*='shadow-[0_'] {
+  box-shadow: none !important;
+}
+html[data-lite='true'] [data-bg-anim],
+html[data-lite='true'] .anim-rise,
+html[data-lite='true'] .animate-pulse-ring {
+  display: none !important;
 }
 
 /* Полоса прокрутки (в панели учителя) */
