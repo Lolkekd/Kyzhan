@@ -38,6 +38,8 @@ export const moodSlide = {
   eyebrow: 'Сабақтың басы',
   title: 'Психологиялық ахуал',
   videoTitle: 'Кибербуллинг туралы бейнеролик',
+  teacherVideoTitle: 'Мұғалім бейнесі',
+  teacherVideoSub: 'Мұғалімнің кіріспе сөзі',
   videoDuration: '1:21',
   slogan: 'Интернетте де мейірімді бол!',
   questions: [

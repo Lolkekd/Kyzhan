@@ -3,7 +3,7 @@ import { BrainCircuit } from 'lucide-react';
 import { aiVideoSlide as T } from '../data/lesson';
 import { settings } from '../config/settings';
 import { SlideHeader } from '../components/ui/SlideHeader';
-import { VideoPlayer } from '../components/video/VideoPlayer';
+import { VideoCard } from '../components/video/VideoCard';
 
 /** Декоративная «нейросеть» по бокам видео */
 function NeuralNet({ flip }: { flip?: boolean }) {
@@ -81,9 +81,9 @@ export function AiVideoSlide() {
           animate={{ opacity: 1, scale: 1, rotateX: 0 }}
           transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           style={{ transformPerspective: 1600 }}
-          className="w-[1120px]"
+          className="mt-24 w-[1000px]"
         >
-          <VideoPlayer src={settings.videos.aiLesson} title={T.title} accent="#c026d3" />
+          <VideoCard src={settings.videos.aiLesson} title={T.title} sub="videos/ai-lesson.mp4" color="#c026d3" className="w-full" big />
         </motion.div>
         <NeuralNet flip />
       </div>
