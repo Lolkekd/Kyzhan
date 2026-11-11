@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { CircleCheck, Crown, Eye, Minus, Plus, RotateCcw, Scale, Search, Trophy } from 'lucide-react';
+import { CircleCheck, Crown, ExternalLink, Eye, Minus, Plus, RotateCcw, Scale, Search, Trophy } from 'lucide-react';
+import joytekaQr from '../assets/joyteka-qr.png';
 import { teamWorkSlide as T } from '../data/lesson';
 import { teams, type Team } from '../data/teams';
 import { SlideHeader } from '../components/ui/SlideHeader';
@@ -63,18 +64,23 @@ function Brief({ title, goal, process, task }: { title: string; goal: string; pr
   );
 }
 
-/** 3.1 «Аралас код»: демонстрация на доске — собрать кесінділер по порядку */
+/** 3.1 «Аралас код»: у каждой группы свой набор кусочков — собрать их по порядку на доске */
 function MixedCode() {
   const M = T.mixed;
-  const order = [5, 2, 7, 0, 3, 6, 1, 4];
-  const [placed, setPlaced] = useLessonState<number>('teamwork.mixed', 0);
+  const [g, setG] = useLessonState<number>('teamwork.mixedGroup', 0);
+  const pieces = M.groups[g]?.pieces ?? [];
+  const order = shuffleIdx(pieces.length, 11 + g);
+  const [placedAll, setPlacedAll] = useLessonState<number[]>('teamwork.mixed2', M.groups.map(() => 0));
+  const placed = placedAll[g] ?? 0;
+  const setPlaced = (v: number) => setPlacedAll(M.groups.map((_, i) => (i === g ? v : placedAll[i] ?? 0)));
   const [wrong, setWrong] = useState<number | null>(null);
-  const done = placed >= M.pieces.length;
-  const indent = (p: string) => (p.startsWith('<table') || p === '</table>' ? 0 : p === '<tr>' || p === '</tr>' ? 1 : 2);
+  const done = placed >= pieces.length;
+  // одинаковые кусочки (<tr>, </tr>) взаимозаменяемы: важен текст, а не конкретная карточка
+  const indent = (p: string) => (p.startsWith('<table') || p === '</table>' || p.startsWith('<caption') ? (p.startsWith('<caption') ? 1 : 0) : p === '<tr>' || p === '</tr>' ? 1 : 2);
 
   const tap = (i: number) => {
-    if (i === placed) {
-      playSound(i + 1 === M.pieces.length ? 'success' : 'pop');
+    if (pieces[i] === pieces[placed]) {
+      playSound(placed + 1 === pieces.length ? 'success' : 'pop');
       setPlaced(placed + 1);
     } else {
       playSound('minus');
@@ -82,45 +88,73 @@ function MixedCode() {
       window.setTimeout(() => setWrong(null), 450);
     }
   };
+  // какие карточки ещё лежат: снимаем по одной карточке каждого уже поставленного текста
+  const left = [...order];
+  for (let k = 0; k < placed; k++) {
+    const j = left.findIndex((i) => pieces[i] === pieces[k]);
+    if (j >= 0) left.splice(j, 1);
+  }
 
   return (
-    <div className="grid h-full grid-cols-[560px_1fr] gap-7">
+    <div className="grid h-full grid-cols-[500px_1fr] gap-7">
       <Brief title={M.title} goal={M.goal} process={M.process} task={M.task} />
       <div className="glass flex min-h-0 flex-col rounded-[30px] p-6" data-no-swipe>
         <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <div className="font-display text-[26px] font-bold">{M.demoTitle}</div>
+          <div className="flex gap-2">
+            {M.groups.map((gr, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setG(i)}
+                className={cn('rounded-xl border-[3px] px-4 py-1.5 font-display text-[20px] font-bold', i === g ? 'border-ink bg-electric text-white shadow-[3px_3px_0_rgb(var(--c-ink))]' : 'border-ink/25 bg-white')}
+              >
+                {gr.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 pl-2">
             <div className={cn('text-[19px]', done ? 'font-semibold text-mint' : 'text-snow/55')}>{done ? 'Дұрыс! Кесте дайын.' : M.demoHint}</div>
           </div>
           <button type="button" onClick={() => setPlaced(0)} aria-label="Қайта бастау" className="grid h-12 w-12 place-items-center rounded-xl border-[3px] border-ink bg-white hover:bg-[rgb(var(--c-sun))]">
             <RotateCcw size={22} />
           </button>
         </div>
-        <div className="mt-4 flex flex-wrap gap-3">
-          {order
-            .filter((i) => i >= placed)
-            .map((i) => (
-              <motion.button
-                key={i}
-                type="button"
-                layout
-                onClick={() => tap(i)}
-                animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], rotate: 0 } : { x: 0, rotate: (i % 3) - 1 }}
-                className={cn('rounded-lg border-[3px] px-4 py-2 font-mono text-[24px] font-semibold', wrong === i ? 'border-rose bg-rose/15' : 'border-ink bg-[#fff1c9] shadow-[3px_3px_0_rgb(var(--c-ink))] hover:bg-[rgb(var(--c-sun))]')}
-              >
-                {M.pieces[i]}
-              </motion.button>
-            ))}
+        <div className="mt-3 flex flex-wrap gap-2.5">
+          {left.map((i) => (
+            <motion.button
+              key={`${g}-${i}`}
+              type="button"
+              layout
+              onClick={() => tap(i)}
+              animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], rotate: 0 } : { x: 0, rotate: (i % 3) - 1 }}
+              className={cn('rounded-lg border-[3px] px-3 py-1.5 font-mono text-[20px] font-semibold', wrong === i ? 'border-rose bg-rose/15' : 'border-ink bg-[#fff1c9] shadow-[3px_3px_0_rgb(var(--c-ink))] hover:bg-[rgb(var(--c-sun))]')}
+            >
+              {pieces[i]}
+            </motion.button>
+          ))}
         </div>
         <div className="mt-4 grid min-h-0 flex-1 grid-cols-2 gap-5">
           <EditorFrame>
-            <CodeBlock lines={M.pieces.slice(0, placed).map((p) => ({ text: p, indent: indent(p) }))} fontSize={24} />
+            <div className="h-full overflow-auto">
+              <CodeBlock lines={pieces.slice(0, placed).map((p) => ({ text: p, indent: indent(p) }))} fontSize={19} />
+            </div>
           </EditorFrame>
-          {done ? <LiveHtml html={M.pieces.join('')} fontSize={48} /> : <div className="grid place-items-center rounded-[28px] border-[3px] border-dashed border-ink/25 bg-white/60 font-display text-[80px] font-black text-ink/15">?</div>}
+          {done ? <LiveHtml html={pieces.join('')} fontSize={30} /> : <div className="grid place-items-center rounded-[28px] border-[3px] border-dashed border-ink/25 bg-white/60 font-display text-[80px] font-black text-ink/15">?</div>}
         </div>
       </div>
     </div>
   );
+}
+
+function shuffleIdx(n: number, seed: number) {
+  const idx = Array.from({ length: n }, (_, i) => i);
+  let s = seed;
+  for (let i = n - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [idx[i], idx[j]] = [idx[j], idx[i]];
+  }
+  return idx;
 }
 
 /** 3.2 «IT детективтері»: найти 5 ошибок в коде */
@@ -191,48 +225,65 @@ function Detectives() {
   );
 }
 
-/** 3.3 Квест: 5 сұрақ, жауап басқанда ашылады */
+/** 3.3 Joyteka квесті: 5 сұрақ, 3 жауап нұсқасы, дұрысын таңдау + QR-код */
 function Quest() {
   const Q = T.quest;
-  const [open, setOpen] = useLessonState<number[]>('teamwork.quest', []);
+  const [picked, setPicked] = useLessonState<(number | null)[]>('teamwork.quest2', Q.questions.map(() => null));
   const colors = ['#7b5cff', '#ff5a5f', '#00a08a', '#e69500', '#d63384'];
+  const right = picked.filter((p, i) => p === Q.questions[i].correct).length;
   return (
-    <div className="flex h-full flex-col gap-4">
-      <div className="flex items-center gap-4 text-[22px]">
-        <span className="font-display text-[26px] font-bold">{Q.title}</span>
-        <span className="text-snow/60">{Q.text}</span>
-      </div>
-      <div className="grid min-h-0 flex-1 grid-cols-5 gap-5">
+    <div className="grid h-full grid-cols-[1fr_300px] gap-6">
+      <div className="grid min-h-0 grid-cols-5 gap-4" data-no-swipe>
         {Q.questions.map((it, i) => {
-          const on = open.includes(i);
+          const p = picked[i];
+          const ok = p === it.correct;
           return (
-            <motion.button
-              key={i}
-              type="button"
-              onClick={() => {
-                playSound(on ? 'click' : 'flip');
-                setOpen(on ? open.filter((x) => x !== i) : [...open, i]);
-              }}
-              whileHover={{ y: -4 }}
-              className="flex flex-col rounded-[28px] border-[3px] border-ink p-5 text-left"
-              style={{ background: on ? hexToRgba(colors[i], 0.16) : '#ffffff', boxShadow: `6px 6px 0 ${colors[i]}` }}
-            >
-              <span className="grid h-14 w-14 place-items-center rounded-2xl border-[3px] border-ink font-display text-[28px] font-black text-white" style={{ background: colors[i] }}>
+            <div key={i} className="flex min-h-0 flex-col rounded-[26px] border-[3px] border-ink bg-white p-4" style={{ boxShadow: `6px 6px 0 ${colors[i]}` }}>
+              <span className="grid h-12 w-12 place-items-center rounded-2xl border-[3px] border-ink font-display text-[24px] font-black text-white" style={{ background: colors[i] }}>
                 {i + 1}
               </span>
-              <span className="mt-4 font-display text-[25px] font-bold leading-snug">{it.q}</span>
-              <AnimatePresence>
-                {on ? (
-                  <motion.span initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-auto rounded-2xl bg-white px-4 py-3 text-[20px] font-semibold leading-snug" style={{ boxShadow: `inset 4px 0 0 ${colors[i]}` }}>
-                    {it.a}
-                  </motion.span>
-                ) : (
-                  <span className="mt-auto text-[17px] text-snow/45">{Q.hint}</span>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              <span className="mt-3 font-display text-[21px] font-bold leading-snug">{it.q}</span>
+              <div className="mt-auto flex flex-col gap-2 pt-3">
+                {it.options.map((o, k) => {
+                  const chosen = p === k;
+                  const showRight = p !== null && k === it.correct;
+                  return (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => {
+                        playSound(k === it.correct ? 'success' : 'minus');
+                        setPicked(picked.map((v, j) => (j === i ? k : v)));
+                      }}
+                      className={cn(
+                        'rounded-xl border-[3px] px-3 py-2 text-left text-[16px] font-semibold leading-tight transition-colors',
+                        showRight ? 'border-ink bg-mint text-white' : chosen ? 'border-rose bg-rose/15' : 'border-ink/20 bg-[#faf7ff] hover:border-ink',
+                      )}
+                    >
+                      {o}
+                    </button>
+                  );
+                })}
+                <span className={cn('h-6 text-center text-[17px] font-bold', ok ? 'text-mint' : 'text-[#d6303a]')}>{p === null ? '' : ok ? Q.right : Q.wrong}</span>
+              </div>
+            </div>
           );
         })}
+      </div>
+      <div className="glass flex flex-col items-center gap-3 rounded-[30px] p-5 text-center">
+        <div className="font-display text-[24px] font-black">{Q.title}</div>
+        <img src={joytekaQr} alt="Joyteka QR" className="w-[200px] rounded-xl border-[3px] border-ink bg-white p-2" />
+        <div className="text-[16px] text-snow/60">{Q.link.replace('https://', '')}</div>
+        <GlowButton size="sm" iconRight={ExternalLink} onClick={() => window.open(Q.link, '_blank', 'noopener')}>
+          {Q.openButton}
+        </GlowButton>
+        <div className="mt-auto font-display text-[44px] font-black leading-none">
+          {right}
+          <span className="text-[26px] text-snow/40"> / {Q.questions.length}</span>
+        </div>
+        <button type="button" onClick={() => setPicked(Q.questions.map(() => null))} className="flex items-center gap-1.5 text-[16px] text-snow/55 hover:text-snow">
+          <RotateCcw size={16} /> Қайта бастау
+        </button>
       </div>
     </div>
   );
@@ -240,7 +291,7 @@ function Quest() {
 
 /** Ұпай тақтасы */
 function Board() {
-  const [scores, setScores] = useLessonState<Scores>('scores.values2', emptyScores());
+  const [scores, setScores] = useLessonState<Scores>('scores.values3', emptyScores());
   const [winnerOpen, setWinnerOpen] = useState(false);
   const totals = teams.map((t) => (scores[t.id] ?? []).reduce((s, v) => s + v, 0));
   const best = Math.max(...totals);

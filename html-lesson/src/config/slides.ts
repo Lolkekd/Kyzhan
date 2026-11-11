@@ -14,6 +14,9 @@ import { TeamWorkSlide } from '../slides/TeamWorkSlide';
 import { ReflectionSlide } from '../slides/ReflectionSlide';
 import { HomeworkSlide } from '../slides/HomeworkSlide';
 import { FinaleSlide } from '../slides/FinaleSlide';
+import { AdalSlide } from '../slides/AdalSlide';
+import { AttrsSlide } from '../slides/AttrsSlide';
+import { AssessSlide } from '../slides/AssessSlide';
 
 /**
  * ПОРЯДОК СЛАЙДОВ И ЭТАПЫ УРОКА
@@ -51,6 +54,7 @@ const P = {
 
 export const slides: SlideDef[] = [
   { id: 'title', title: 'Бастау', group: 'start', component: TitleSlide, palette: P.blue, bare: true },
+  { id: 'adal', title: 'Адал азамат', group: 'start', component: AdalSlide, palette: P.warm },
   { id: 'mood', title: 'Психологиялық ахуал', group: 'start', component: MoodSlide, palette: P.violet },
   { id: 'teams', title: 'Топқа бөлу', group: 'start', component: TeamsSlide, palette: P.cyan },
   { id: 'plickers', title: 'Үй тапсырмасын тексеру', group: 'check', component: PlickersSlide, palette: P.blue },
@@ -58,10 +62,12 @@ export const slides: SlideDef[] = [
   { id: 'goals', title: 'Мақсат пен жоспар', group: 'new', component: GoalsSlide, palette: P.cyan },
   { id: 'ai-video', title: 'ЖИ бейнеролигі', group: 'new', component: AiVideoSlide, palette: P.violet },
   { id: 'explain', title: 'Жаңа тақырып', group: 'new', component: ExplainSlide, palette: P.blue },
+  { id: 'attrs', title: 'caption · colspan · rowspan', group: 'new', component: AttrsSlide, palette: P.cyan },
   { id: 'individual', title: 'Жеке жұмыс', group: 'practice', component: IndividualSlide, palette: P.cyan },
   { id: 'pair', title: 'Жұптық жұмыс', group: 'practice', component: PairSlide, palette: P.violet },
   { id: 'break', title: 'Сергіту сәті', group: 'practice', component: BreakSlide, palette: P.warm },
   { id: 'teamwork', title: 'Топтық жұмыс', group: 'practice', component: TeamWorkSlide, palette: P.blue },
+  { id: 'assess', title: 'Шыңға шығу', group: 'end', component: AssessSlide, palette: P.green },
   { id: 'reflection', title: 'Рефлексия', group: 'end', component: ReflectionSlide, palette: P.green },
   { id: 'homework', title: 'Үй тапсырмасы', group: 'end', component: HomeworkSlide, palette: P.cyan },
   { id: 'finale', title: 'Сабақтың соңы', group: 'end', component: FinaleSlide, palette: P.violet, bare: true },

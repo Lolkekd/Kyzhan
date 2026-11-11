@@ -188,7 +188,7 @@ export function ExplainSlide() {
         </motion.div>
       </div>
 
-      <Modal open={videoOpen} onClose={() => setVideoOpen(false)} title={T.teacherVideo} width={1400}>
+      <Modal open={videoOpen} onClose={() => setVideoOpen(false)} title={T.teacherVideo} width={1150}>
         <VideoPlayer src={settings.videos.teacher} title={T.teacherVideo} />
       </Modal>
     </div>

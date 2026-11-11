@@ -18,6 +18,9 @@ export const CONTENT: Record<string, Obj | unknown[]> = {
 /** Какие наборы данных относятся к слайду */
 export const SLIDE_CONTENT: Record<string, string[]> = {
   title: ['titleSlide', 'settings'],
+  adal: ['adalSlide'],
+  attrs: ['attrsSlide'],
+  assess: ['assessSlide'],
   mood: ['moodSlide'],
   teams: ['teamsSlide', 'teams'],
   plickers: ['plickersSlide'],

@@ -91,10 +91,10 @@ function OrderGame() {
       <GameHeader title={T.order.title} hint={T.order.hint} link={T.order.link} done={done} onReset={() => setPlaced(0)} />
       <div className="grid min-h-0 flex-1 grid-cols-[1fr_250px] gap-4">
         <div className="relative flex flex-col justify-between">
-          <span className="absolute bottom-3 left-[23px] top-3 w-[4px] rounded-full bg-ink/15" />
+          <span className="absolute bottom-3 left-[18px] top-3 w-[4px] rounded-full bg-ink/15" />
           {items.map((it, i) => (
             <div key={i} className="relative flex items-center gap-3">
-              <span className={cn('z-10 grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full border-[3px] font-display text-[20px] font-bold', i < placed ? 'border-ink bg-electric text-white' : 'border-ink/25 bg-white text-snow/40')}>
+              <span className={cn('z-10 grid h-[40px] w-[40px] shrink-0 place-items-center rounded-full border-[3px] font-display text-[18px] font-bold', i < placed ? 'border-ink bg-electric text-white' : 'border-ink/25 bg-white text-snow/40')}>
                 {i + 1}
               </span>
               <AnimatePresence>
@@ -107,7 +107,7 @@ function OrderGame() {
             </div>
           ))}
         </div>
-        <div className="flex flex-col justify-center gap-2">
+        <div className="flex flex-col justify-center gap-1.5">
           {done ? (
             <div className="grid place-items-center gap-3 text-center">
               <PartyPopper size={64} className="text-mint" />
@@ -123,7 +123,7 @@ function OrderGame() {
                   onClick={() => tap(i)}
                   animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0] } : { x: 0 }}
                   transition={{ duration: 0.4 }}
-                  className={cn('rounded-xl border-[3px] px-3 py-1.5 text-left font-mono text-[17px] font-semibold leading-tight', wrong === i ? 'border-rose bg-rose/15' : 'border-ink bg-[#fff1c9] hover:bg-[rgb(var(--c-sun))]')}
+                  className={cn('rounded-xl border-[3px] px-3 py-1 text-left font-mono text-[16px] font-semibold leading-tight', wrong === i ? 'border-rose bg-rose/15' : 'border-ink bg-[#fff1c9] hover:bg-[rgb(var(--c-sun))]')}
                 >
                   {items[i]}
                 </motion.button>

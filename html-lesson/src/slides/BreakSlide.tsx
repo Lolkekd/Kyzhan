@@ -1,108 +1,97 @@
-import { motion } from 'motion/react';
-import { Hand, PersonStanding, RefreshCcw, Wind } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ExternalLink, Fish, Palette, Sparkles, Target, Wifi } from 'lucide-react';
 import { breakSlide as T } from '../data/lesson';
 import { settings } from '../config/settings';
 import { VideoPlayer } from '../components/video/VideoPlayer';
-import { playSound } from '../lib/sound';
+import { SlideHeader } from '../components/ui/SlideHeader';
+import { GlowButton } from '../components/ui/GlowButton';
+import { SubtaskTabs } from '../components/tasks/Practice';
 import { useLessonState } from '../store/lessonStore';
 
-const SHAPES = [
-  { c: '#e69500', x: 6, y: 18, s: 90, r: '50%', d: 7 },
-  { c: '#e0438c', x: 88, y: 12, s: 70, r: '22px', d: 9 },
-  { c: '#12a06a', x: 92, y: 70, s: 110, r: '50%', d: 8 },
-  { c: '#0891a2', x: 3, y: 74, s: 64, r: '18px', d: 10 },
-  { c: '#7b5cff', x: 48, y: 90, s: 50, r: '50%', d: 6 },
-  { c: '#ea6a1a', x: 70, y: 4, s: 46, r: '14px', d: 11 },
+const PAIR_STYLE = [
+  { icon: Fish, color: '#0284c7' },
+  { icon: Palette, color: '#e07b00' },
 ];
-const MOVE_ICONS = [Hand, RefreshCcw, Wind];
-const MOVE_COLORS = ['#e69500', '#e0438c', '#12a06a'];
 
+/** Сергіту сәті: «Шығармашылық аквариум!» (+ вкладка с видео, если нужно) */
 export function BreakSlide() {
-  const [active, setActive] = useLessonState<number | null>('break.move', null);
+  const [tab, setTab] = useLessonState<'task' | 'video'>('break.tab', 'task');
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden px-[100px] pt-4">
-      {/* мягкие плавающие фигуры — без мигания */}
-      {SHAPES.map((sh, i) => (
-        <span
-          key={i}
-          className="anim-float-rot pointer-events-none absolute opacity-70"
-          style={{
-            left: `${sh.x}%`,
-            top: `${sh.y}%`,
-            width: sh.s,
-            height: sh.s,
-            borderRadius: sh.r,
-            background: `linear-gradient(135deg, ${sh.c}, ${sh.c}55)`,
-            boxShadow: `0 10px 40px -10px ${sh.c}`,
-            ['--dur' as string]: `${sh.d}s`,
-          }}
-        />
-      ))}
+    <div className="flex h-full flex-col px-[100px] pt-6">
+      <SlideHeader
+        eyebrow={T.eyebrow}
+        title={T.title}
+        right={
+          <div className="flex items-center gap-4">
+            <SubtaskTabs
+              items={[
+                { id: 'task', label: T.tabs.task, sub: T.subtitle },
+                { id: 'video', label: T.tabs.video, sub: 'videos/break.mp4' },
+              ]}
+              value={tab}
+              onChange={(v) => setTab(v as 'task' | 'video')}
+            />
+          </div>
+        }
+      />
 
-      <div className="relative text-center">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="eyebrow text-amber/90">
-          {T.eyebrow}
-        </motion.div>
-        <h1 className="mt-1 font-display text-[84px] font-extrabold leading-none">
-          {T.title.split('').map((ch, i) => (
-            <motion.span
-              key={i}
-              className="inline-block"
-              initial={{ opacity: 0, y: -80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.04, type: 'spring', stiffness: 260, damping: 16 }}
-            >
-              <span
-                className="anim-letter inline-block"
-                style={{ color: ['#e69500', '#e0438c', '#12a06a', '#0891a2', '#7b5cff'][i % 5], ['--delay' as string]: `${1 + i * 0.08}s` }}
-              >
-                {ch === ' ' ? '\u00A0' : ch}
-              </span>
-            </motion.span>
-          ))}
-        </h1>
-        <p className="mt-3 text-[28px] text-snow/70">{T.subtitle}</p>
-      </div>
-
-      <div className="relative mt-7 flex flex-1 items-start justify-center gap-10">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, type: 'spring' }} className="w-[1060px]">
-          <VideoPlayer src={settings.videos.break} title={T.title} accent="#e69500" />
-        </motion.div>
-
-        {T.moves.length > 0 && (
-          <div className="flex w-[480px] flex-col gap-5">
-            {T.moves.map((m, i) => {
-              const Icon = MOVE_ICONS[i % MOVE_ICONS.length] ?? PersonStanding;
-              const c = MOVE_COLORS[i % MOVE_COLORS.length];
-              const on = active === i;
+      <AnimatePresence mode="wait">
+        {tab === 'task' ? (
+          <motion.div key="task" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="mt-6 grid min-h-0 flex-1 grid-cols-[1fr_1fr_470px] gap-7 pb-8">
+            {T.pairs.map((p, i) => {
+              const S = PAIR_STYLE[i % PAIR_STYLE.length];
               return (
-                <motion.button
+                <motion.div
                   key={i}
-                  type="button"
-                  initial={{ opacity: 0, x: 60 }}
-                  animate={{ opacity: 1, x: 0, scale: on ? 1.05 : 1 }}
-                  transition={{ delay: active === null ? 0.5 + i * 0.12 : 0, type: 'spring', stiffness: 260, damping: 18 }}
-                  onClick={() => {
-                    playSound('pop');
-                    setActive(on ? null : i);
-                  }}
-                  className="glass flex h-[150px] items-center gap-6 rounded-[32px] px-7 text-left"
-                  style={{ boxShadow: on ? `0 0 0 3px ${c}, 0 20px 60px -20px ${c}` : '0 20px 60px -20px rgba(0,0,0,0.6)' }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.12 }}
+                  className="flex flex-col rounded-[36px] border-[3px] border-ink bg-white p-8"
+                  style={{ boxShadow: `8px 8px 0 ${S.color}` }}
                 >
-                  <span
-                    className={`grid h-20 w-20 shrink-0 place-items-center rounded-[22px] ${on ? 'anim-wiggle' : ''}`}
-                    style={{ background: c, ['--dur' as string]: '1.2s', ['--wiggle' as string]: '-12deg' }}
-                  >
-                    <Icon size={44} className="text-ink" />
+                  <span className="grid h-24 w-24 place-items-center rounded-[28px] border-[3px] border-ink text-white" style={{ background: S.color }}>
+                    <S.icon size={54} />
                   </span>
-                  <span className="font-display text-[30px] font-semibold leading-tight">{m}</span>
-                </motion.button>
+                  <div className="mt-6 font-display text-[22px] font-bold uppercase tracking-[0.16em]" style={{ color: S.color }}>
+                    {p.who}
+                  </div>
+                  <div className="mt-1 font-display text-[44px] font-black leading-tight">{p.title}</div>
+                  <p className="mt-4 text-[25px] leading-snug text-snow/85">{p.text}</p>
+                </motion.div>
               );
             })}
-          </div>
+            <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="flex flex-col gap-5">
+              <div className="glass rounded-[30px] p-6">
+                <div className="flex items-center gap-2 font-display text-[20px] font-bold uppercase tracking-[0.14em] text-rose">
+                  <Target size={24} /> Мақсаты
+                </div>
+                <p className="mt-2 text-[21px] leading-snug">{T.goal}</p>
+              </div>
+              <div className="rounded-[30px] border-[3px] border-ink bg-[#fff1c9] p-6">
+                <div className="flex items-center gap-2 font-display text-[20px] font-bold uppercase tracking-[0.14em] text-electric">
+                  <Sparkles size={24} /> Мұғалім сөзі
+                </div>
+                <p className="mt-2 text-[21px] leading-snug">{T.teacherWords}</p>
+              </div>
+              <div className="mt-auto flex flex-col gap-2">
+                <GlowButton size="lg" iconRight={ExternalLink} icon={Fish} onClick={() => window.open(T.url, '_blank', 'noopener')}>
+                  {T.openButton}
+                </GlowButton>
+                <div className="flex items-center justify-center gap-2 text-[18px] text-snow/55">
+                  <Wifi size={18} /> {T.url.replace('https://', '')} · {T.internetNote}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div key="video" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="mt-6 flex min-h-0 flex-1 items-start justify-center pb-8">
+            <div className="w-[1300px]">
+              <VideoPlayer src={settings.videos.break} title={T.eyebrow} accent="#e69500" />
+            </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 }

@@ -27,7 +27,9 @@ export function HtmlCode({ code, fontSize = 22, className, file }: { code: strin
 
 /** Настоящий результат в браузере: HTML рисует сам браузер (iframe), как у студента на компьютере */
 export function LiveHtml({ html, fontSize = 26, className, url = 'index.html' }: { html: string; fontSize?: number; className?: string; url?: string }) {
-  const doc = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%}body{display:flex;align-items:center;justify-content:center;font:${fontSize}px 'Times New Roman',serif;padding:20px;box-sizing:border-box}</style></head>${html.replace(/^\s*<html>|<\/html>\s*$/g, '')}</html>`;
+  // широкие таблицы (width="1000") уменьшаются, чтобы целиком поместиться в окне
+  const fit = `<script>function f(){var b=document.body;b.style.zoom=1;var k=Math.min(1,(innerWidth-24)/b.scrollWidth,(innerHeight-24)/b.scrollHeight);b.style.zoom=k}addEventListener('load',f);addEventListener('resize',f)<\/script>`;
+  const doc = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0}body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font:${fontSize}px 'Times New Roman',serif;padding:12px;box-sizing:border-box;transform-origin:0 0}</style>${fit}</head>${html.replace(/^\s*<html>|<\/html>\s*$/g, '')}</html>`;
   return (
     <BrowserFrame className={className} url={url}>
       <iframe title="preview" srcDoc={doc} className="pointer-events-none h-full w-full border-0 bg-white" tabIndex={-1} />

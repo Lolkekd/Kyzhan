@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, ExternalLink, PartyPopper, ScanLine } from 'lucide-react';
+import { Check, Eye, ExternalLink, PartyPopper, ScanLine } from 'lucide-react';
 import { plickersSlide as T } from '../data/lesson';
 import { settings } from '../config/settings';
 import { SlideHeader } from '../components/ui/SlideHeader';
@@ -17,7 +17,11 @@ export function PlickersSlide() {
   const count = done.filter(Boolean).length;
   const complete = count === n;
 
+  const [cur, setCur] = useLessonState<number | null>('plickers.q', null);
+  const [ans, setAns] = useLessonState<boolean>('plickers.ans', false);
   const toggle = (i: number) => {
+    setCur(i);
+    setAns(false);
     const next = done.map((v, k) => (k === i ? !v : v));
     setDone(next);
     if (next.every(Boolean)) playSound('success');
@@ -106,7 +110,32 @@ export function PlickersSlide() {
             ))}
           </div>
 
-          <div className="mt-14 flex h-[200px] items-center justify-center">
+          {/* Текущий вопрос и ответ (по нажатию) */}
+          <div className="mt-6 h-[200px]">
+            <AnimatePresence mode="wait">
+              {cur !== null && T.questions[cur] && (
+                <motion.div key={cur} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="glass flex h-full flex-col rounded-[30px] px-8 py-5">
+                  <div className="font-display text-[20px] font-bold uppercase tracking-[0.14em] text-rose">
+                    {cur + 1}-{T.questionLabel}
+                  </div>
+                  <div className="mt-1 font-display text-[34px] font-bold leading-tight">{T.questions[cur].q}</div>
+                  <div className="mt-auto flex items-end gap-4">
+                    {ans ? (
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl bg-mint/15 px-5 py-2 text-[24px] font-semibold leading-snug text-[#0b6b47]">
+                        {T.answerLabel}: {T.questions[cur].a}
+                      </motion.div>
+                    ) : (
+                      <button type="button" onClick={() => { playSound('reveal'); setAns(true); }} className="btn-candy flex h-12 items-center gap-2 rounded-2xl bg-mint px-5 font-display text-[20px] font-bold text-white">
+                        <Eye size={22} /> {T.answerLabel}
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="mt-4 flex h-[150px] items-center justify-center">
             <AnimatePresence mode="wait">
               {complete ? (
                 <motion.div
@@ -127,7 +156,7 @@ export function PlickersSlide() {
                 </motion.div>
               ) : (
                 <motion.div key="progress" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center">
-                  <div className="font-display text-[88px] font-bold leading-none">
+                  <div className="font-display text-[64px] font-bold leading-none">
                     <span className="text-gradient">{count}</span>
                     <span className="text-snow/30"> / {n}</span>
                   </div>

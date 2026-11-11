@@ -15,7 +15,7 @@ export const teams: Team[] = [
   {
     id: 'team1',
     number: 1,
-    name: 'Тег шеберлері',
+    name: 'HTML',
     motto: 'Әр тег — өз орнында!',
     color: '#0891a2',
     icon: CodeXml,
@@ -24,7 +24,7 @@ export const teams: Team[] = [
   {
     id: 'team2',
     number: 2,
-    name: 'Веб-сәулетшілер',
+    name: 'TABLE',
     motto: 'Құрылымды біз саламыз!',
     color: '#8b4fe8',
     icon: Layers,
@@ -33,7 +33,7 @@ export const teams: Team[] = [
   {
     id: 'team3',
     number: 3,
-    name: 'Пиксель батырлары',
+    name: 'BORDER',
     motto: 'Әр пиксель маңызды!',
     color: '#e69500',
     icon: Zap,

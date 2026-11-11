@@ -276,6 +276,13 @@ function normalize(p: Project): Project {
   out.slides = (p.slides ?? d.slides)
     .filter((s) => s.base === null || defsById[s.base])
     .map((s) => ({ ...s, over: s.over ?? {}, texts: s.texts ?? {}, overlay: s.overlay ?? [] }));
+  // новые слайды из обновлённой презентации вставляем после их соседа по исходному порядку
+  DEFS.forEach((def, i) => {
+    if (out.slides.some((s) => s.base === def.id)) return;
+    const prev = DEFS.slice(0, i).reverse().find((x) => out.slides.some((s) => s.id === x.id));
+    const at = prev ? out.slides.findIndex((s) => s.id === prev.id) + 1 : 0;
+    out.slides.splice(at, 0, { id: def.id, base: def.id, title: def.title, over: {}, texts: {}, overlay: [] });
+  });
   if (!out.slides.length) out.slides = d.slides;
   return out;
 }

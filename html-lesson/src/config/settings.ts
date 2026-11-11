@@ -13,8 +13,8 @@ export const settings = {
   soundEnabledByDefault: true,
 
   /** Необязательные подписи на титульном экране (оставьте пустыми, чтобы скрыть) */
-  teacherName: '',
-  schoolName: '',
+  teacherName: 'Оқытушы: Қ.А. Арыкова',
+  schoolName: 'АЖ-01-26 тобы',
 
   /** Видео: положите файлы в папку public/videos/ с такими именами */
   videos: {

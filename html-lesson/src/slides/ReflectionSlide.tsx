@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { MessageCircle, Plus, Sparkles, Undo2, UsersRound } from 'lucide-react';
+import { ExternalLink, MessageCircle, Plus, Sparkles, Undo2, UsersRound } from 'lucide-react';
 import { reflectionSlide as T } from '../data/lesson';
 import { teams } from '../data/teams';
 import { SlideHeader } from '../components/ui/SlideHeader';
@@ -65,8 +65,13 @@ export function ReflectionSlide() {
         eyebrow={T.eyebrow}
         title={T.title}
         right={
-          <div className="chip">
-            <Sparkles size={22} className="text-[#c26a00]" /> {T.method}
+          <div className="flex items-center gap-3">
+            <div className="chip">
+              <Sparkles size={22} className="text-[#c26a00]" /> {T.method}
+            </div>
+            <button type="button" onClick={() => window.open(T.padletUrl, '_blank', 'noopener')} className="btn-candy flex h-14 items-center gap-2 rounded-2xl bg-rose px-5 font-display text-[21px] font-bold text-white" title="Интернет керек">
+              {T.padletButton} <ExternalLink size={20} />
+            </button>
           </div>
         }
       />
