@@ -60,7 +60,7 @@ export const slides: SlideDef[] = [
   { id: 'plickers', title: 'Үй тапсырмасын тексеру', group: 'check', component: PlickersSlide, palette: P.blue },
   { id: 'puzzle', title: 'Жасырын тақырып', group: 'new', component: PuzzleSlide, palette: P.violet },
   { id: 'goals', title: 'Мақсат пен жоспар', group: 'new', component: GoalsSlide, palette: P.cyan },
-  { id: 'ai-video', title: 'ЖИ бейнеролигі', group: 'new', component: AiVideoSlide, palette: P.violet },
+  { id: 'ai-video', title: 'Мұғалім бейнесі', group: 'new', component: AiVideoSlide, palette: P.violet },
   { id: 'explain', title: 'Жаңа тақырып', group: 'new', component: ExplainSlide, palette: P.blue },
   { id: 'attrs', title: 'caption · colspan · rowspan', group: 'new', component: AttrsSlide, palette: P.cyan },
   { id: 'individual', title: 'Жеке жұмыс', group: 'practice', component: IndividualSlide, palette: P.cyan },

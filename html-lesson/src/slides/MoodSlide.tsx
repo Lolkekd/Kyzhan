@@ -30,11 +30,11 @@ export function MoodSlide() {
         <motion.div initial={{ opacity: 0, scale: 0.94, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.7 }}>
           {/* два отдельных видео: учитель и ролик про кибербуллинг */}
           <div className="flex h-full flex-col gap-7 pb-8">
-            <VideoCard src={settings.videos.teacher} title={T.teacherVideoTitle} sub={T.teacherVideoSub} color="#7b5cff" className="flex-1" big />
+            <VideoCard src={settings.videos.aiLesson} title={T.teacherVideoTitle} sub={T.teacherVideoSub} color="#7b5cff" className="flex-1" big />
             <VideoCard src={settings.videos.cyberbullying} title={T.videoTitle} sub={T.videoDuration} color="#ff5a5f" className="flex-1" big />
             <div className="flex items-center gap-3 text-[20px] text-snow/50">
               <HeartHandshake size={22} className="text-rose" />
-              videos/teacher.mp4 · videos/cyberbullying.mp4
+              videos/ai-lesson.mp4 · videos/cyberbullying.mp4
             </div>
           </div>
         </motion.div>

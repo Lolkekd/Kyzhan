@@ -38,8 +38,8 @@ export const moodSlide = {
   eyebrow: 'Сабақтың басы',
   title: 'Психологиялық ахуал',
   videoTitle: 'Кибербуллинг туралы бейнеролик',
-  teacherVideoTitle: 'Мұғалім бейнесі',
-  teacherVideoSub: 'Мұғалімнің кіріспе сөзі',
+  teacherVideoTitle: 'Жасанды интеллект бейнеролигі',
+  teacherVideoSub: 'ЖИ көмегімен жасалған',
   videoDuration: '1:21',
   slogan: 'Интернетте де мейірімді бол!',
   questions: [
@@ -131,7 +131,7 @@ export const goalsSlide = {
     {
       title: 'Жаңа білім',
       color: '#5b5bd6',
-      items: ['ЖИ бейнеролигі', '<table> <tr> <th> <td>', '<caption> colspan rowspan'],
+      items: ['Мұғалім бейнесі', '<table> <tr> <th> <td>', '<caption> colspan rowspan'],
       note: 'Кесте тегтерімен танысып, кестенің қалай құрылатынын көреміз',
     },
     {
@@ -152,9 +152,9 @@ export const goalsSlide = {
 /* ───────── 7. Жасанды интеллект бейнеролигі ───────── */
 export const aiVideoSlide = {
   eyebrow: 'Жаңа білім',
-  title: 'Жасанды интеллект бейнеролигі',
+  title: 'Мұғалім бейнесі',
   subtitle: 'Бейнені мұқият көріп, негізгі ойларды есте сақтаңдар',
-  badge: 'ЖИ көмегімен жасалған',
+  badge: 'Мұғалімнің түсіндірмесі',
 };
 
 /* ───────── 8. Жаңа тақырыпты түсіндіру ───────── */

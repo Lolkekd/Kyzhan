@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { BrainCircuit } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { aiVideoSlide as T } from '../data/lesson';
 import { settings } from '../config/settings';
 import { SlideHeader } from '../components/ui/SlideHeader';
@@ -65,7 +65,7 @@ export function AiVideoSlide() {
         size="md"
         right={
           <div className="chip border-magenta/40 bg-magenta/10 text-[#a21caf]">
-            <BrainCircuit size={24} />
+            <GraduationCap size={24} />
             {T.badge}
           </div>
         }
@@ -83,7 +83,7 @@ export function AiVideoSlide() {
           style={{ transformPerspective: 1600 }}
           className="mt-24 w-[1000px]"
         >
-          <VideoCard src={settings.videos.aiLesson} title={T.title} sub="videos/ai-lesson.mp4" color="#c026d3" className="w-full" big />
+          <VideoCard src={settings.videos.teacher} title={T.title} sub="videos/teacher.mp4" color="#c026d3" className="w-full" big />
         </motion.div>
         <NeuralNet flip />
       </div>

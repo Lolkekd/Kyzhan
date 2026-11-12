@@ -84,8 +84,8 @@ export function applyVideos(map: Record<string, string>, resolve: (assetId: stri
 }
 export const VIDEO_KEYS: Record<string, string> = {
   cyberbullying: 'Кибербуллинг (слайд «Психологиялық ахуал»)',
-  aiLesson: 'ЖИ бейнеролигі',
-  teacher: 'Мұғалім бейнесі (слайды «Психологиялық ахуал» и «Жаңа тақырып»)',
+  aiLesson: 'ЖИ бейнеролигі (слайд «Психологиялық ахуал»)',
+  teacher: 'Мұғалім бейнесі (слайды «Мұғалім бейнесі» и «HTML-де кесте құру»)',
   break: 'Сергіту сәті',
 };
-export const SLIDE_VIDEOS: Record<string, string[]> = { mood: ['teacher', 'cyberbullying'], 'ai-video': ['aiLesson'], explain: ['teacher'], break: ['break'] };
+export const SLIDE_VIDEOS: Record<string, string[]> = { mood: ['aiLesson', 'cyberbullying'], 'ai-video': ['teacher'], explain: ['teacher'], break: ['break'] };
